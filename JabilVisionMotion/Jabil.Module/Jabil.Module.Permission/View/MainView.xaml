@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="Jabil.Module.Permission.View.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:permiss="clr-namespace:Jabil.Module.Permission"
+             xmlns:local="clr-namespace:Jabil.Module.Permission.View"
+             xmlns:comm="clr-namespace:Jabil.Module.Permission.Common"
+             xmlns:matrial="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"  Background="White" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Jabil.Module.Permission;component/Permission.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <comm:PermissionVisibilityConverter x:Key="perConvert"/>
+            <comm:VerifiedInfoVisibilityConverter x:Key="VerifConvert"/>
+
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+    <matrial:DialogHost Style="{StaticResource MaterialDesignEmbeddedDialogHost}" Identifier="root">
+        <Grid>
+            <Image  Stretch="Fill" Source="{Binding Source={x:Static permiss:BitmapFactory.BackGround}}"/>
+
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <DockPanel LastChildFill="False">
+                    <StackPanel Orientation="Horizontal" Margin="10,0" >
+                        <StackPanel.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource   MaterialDesignOutlinedButton}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="BorderBrush" Value="#12B1EB"/>
+                                <Setter Property="Margin" Value="5,0"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Content="用户管理" 
+                            Visibility="{Binding Source={x:Static permiss:PermissionSystem.Instance},UpdateSourceTrigger=PropertyChanged, Path=CurrentUser,Converter={StaticResource perConvert},ConverterParameter=权限/用户管理}"
+                            Command="{Binding OpenCommand}" CommandParameter="Users"/>
+                        <Button Content="角色管理" 
+                            Visibility="{Binding Source={x:Static permiss:PermissionSystem.Instance},Path=CurrentUser,Converter={StaticResource perConvert},UpdateSourceTrigger=Default,ConverterParameter=权限/角色管理}"
+                            Command="{Binding OpenCommand}" CommandParameter="Roles"/>
+                        <Button Content="权限管理" 
+                            Visibility="{Binding Source={x:Static permiss:PermissionSystem.Instance},Path=CurrentUser,Converter={StaticResource perConvert},UpdateSourceTrigger=Default,ConverterParameter=权限/权限管理}"
+                            
+                            Command="{Binding OpenCommand}" CommandParameter="Permission"/>
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="16,0">
+                        <Button Foreground="White" Style="{StaticResource MaterialDesignFlatButton}"
+                            Visibility="{Binding Source={x:Static permiss:PermissionSystem.Instance},Path=CurrentUser,Converter={StaticResource VerifConvert}}"
+                            Command="{Binding ApplyTempPasswordCommad}">
+                            申请临时管理员密码
+                        </Button >
+                        <Button Foreground="White" Style="{StaticResource MaterialDesignFlatButton}"
+                            Visibility="{Binding Source={x:Static permiss:PermissionSystem.Instance},Path=CurrentUser,Converter={StaticResource VerifConvert}}"
+                            Command="{Binding VerifiedTempPasswordCommand}">
+                            <matrial:PackIcon Kind="VerifiedUser"/>
+                        </Button>
+
+                        <Button  Style="{StaticResource  MaterialDesignOutlinedButton}" Width="120" Height="40" Padding="0"
+                             
+                             Command="{Binding OpenCommand}" CommandParameter="Login">
+                            <StackPanel Orientation="Horizontal">
+
+                                <matrial:PackIcon Kind="User" VerticalAlignment="Center" Width="30" Height="30" Foreground="White"/>
+                                <TextBlock  Text="{Binding Source={x:Static permiss:PermissionSystem.Instance},Path=CurrentUser.UserName,TargetNullValue='未登录'}" VerticalAlignment="Center" Foreground="White" />
+
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </DockPanel>
+                <ContentControl Grid.Row="1" x:Name="mainView"  DataContext="{Binding Current}" Margin="16"
+                                FocusManager.IsFocusScope="True"
+                            Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}">
+
+                </ContentControl>
+
+                <!--<local:LoginView  Grid.Row="1"/>-->
+
+                <matrial:Snackbar Foreground="White"
+                        x:Name="MainSnackbar"
+                        MessageQueue="{matrial:MessageQueue}"
+                        Grid.Row="2"/>
+
+            </Grid>
+
+
+
+        </Grid>
+
+    </matrial:DialogHost>
+
+
+
+
+
+
+
+</UserControl>

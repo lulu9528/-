@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D7E139BF-9787-480C-B623-EC04343F5F18}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Jabil.Module.Setting</RootNamespace>
+    <AssemblyName>Jabil.Module.Setting</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\JabilVisionMotion\JabilVisionMotion\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\JabilVisionMotion\bin\Debug\Jabil.Module.Setting.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.4.2.13, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=3.1.0.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=4.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql, Version=4.1.14.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.5.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.5.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlSugar, Version=5.1.4.198, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\SqlSugar.dll</HintPath>
+    </Reference>
+    <Reference Include="SunnyUI">
+      <HintPath>..\..\Using\界面库\SunnyUI.dll</HintPath>
+    </Reference>
+    <Reference Include="SunnyUI.Common">
+      <HintPath>..\..\Using\界面库\SunnyUI.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Text.Json, Version=9.0.0.7, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <!-- ===== JVS 进程内嵌入（第二种方式：JvlDotNet；取图由 JVS 相机工具 .jvt 触发，点胶机进程不驱动硬件 SDK）===== -->
+    <!-- 历史遗留的 Camera(.LBAS)/MvCamCtrl 硬件 SDK 引用已清理（JvsCamera 不驱动硬件相机，代码无引用） -->
+    <Reference Include="Jabil.Vision.JvlDotNet">
+      <HintPath>..\..\Using\JVS\managed\Jabil.Vision.JvlDotNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Python.Runtime">
+      <HintPath>..\..\Using\JVS\managed\Python.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>..\..\Using\JVS\managed\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Control\LimitControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\LimitControl.Designer.cs">
+      <DependentUpon>LimitControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\OffsetControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\OffsetControl.Designer.cs">
+      <DependentUpon>OffsetControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\ParameterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\ParameterControl.Designer.cs">
+      <DependentUpon>ParameterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\RotateXY.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\RotateXY.Designer.cs">
+      <DependentUpon>RotateXY.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\RotationCentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\RotationCentControl.Designer.cs">
+      <DependentUpon>RotationCentControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Control\XYR.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\XYR.Designer.cs">
+      <DependentUpon>XYR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm\Frm_System.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_System.Designer.cs">
+      <DependentUpon>Frm_System.cs</DependentUpon>
+    </Compile>
+    <!-- ===== JVS 进程内嵌入组件 ===== -->
+    <Compile Include="Lib\JVS\Frm_JvsSetting.cs" />
+    <Compile Include="Lib\JVS\JvsCamera.cs" />
+    <Compile Include="Lib\JVS\JvsPaths.cs" />
+    <Compile Include="Lib\JVS\JvsPoint.cs" />
+    <Compile Include="Lib\JVS\JvsRuntime.cs" />
+    <Compile Include="Lib\JVS\JvsToolBlockRunner.cs" />
+    <Compile Include="Lib\JVS\JvsVisionBridge.cs" />
+    <Compile Include="Lib\JVS\JvsWorkspaceMapping.cs" />
+    <Compile Include="Frm\Frm_Project.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_Project.Designer.cs">
+      <DependentUpon>Frm_Project.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Control\LimitControl.resx">
+      <DependentUpon>LimitControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\OffsetControl.resx">
+      <DependentUpon>OffsetControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\ParameterControl.resx">
+      <DependentUpon>ParameterControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\RotateXY.resx">
+      <DependentUpon>RotateXY.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\RotationCentControl.resx">
+      <DependentUpon>RotationCentControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\XYR.resx">
+      <DependentUpon>XYR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_System.resx">
+      <DependentUpon>Frm_System.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_Project.resx">
+      <DependentUpon>Frm_Project.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\BasicClassLibrary\BasicClassLibrary\BasicClassLibrary.csproj">
+      <Project>{7C794049-F2CC-4B57-A798-ABDE460FBBA5}</Project>
+      <Name>BasicClassLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Jabil.Lib\Jabil.Lib.csproj">
+      <Project>{DC8467E0-5049-44D8-ACAC-E4676EA95670}</Project>
+      <Name>Jabil.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jabil.Module.Log\Jabil.Module.Log.csproj">
+      <Project>{81F88FA8-AAA2-4E1D-B088-5A7F1FD0ACB1}</Project>
+      <Name>Jabil.Module.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jabil.Module.Permission\Jabil.Module.Permission.csproj">
+      <Project>{5760637A-5862-4C1E-BC0C-EA693CDFC262}</Project>
+      <Name>Jabil.Module.Permission</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jabil.Module.Vision\Jabil.Module.Vision.csproj">
+      <Project>{684E9FC4-7E50-40E4-8D29-073F1C50B052}</Project>
+      <Name>Jabil.Module.Vision</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

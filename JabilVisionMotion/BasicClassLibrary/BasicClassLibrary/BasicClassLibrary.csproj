@@ -1,0 +1,365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7C794049-F2CC-4B57-A798-ABDE460FBBA5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>BasicClassLibrary</RootNamespace>
+    <AssemblyName>BasicClassLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\JabilVisionMotion\JabilVisionMotion\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\JabilVisionMotion\JabilVisionMotion\bin\Debug\BasicClassLibrary.xml</DocumentationFile>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>8.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>8.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>8.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>8.0</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\Using\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Using\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\..\Using\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\Using\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql, Version=4.1.14.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\Using\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\..\Using\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\Using\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\..\Using\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlSugar, Version=5.1.4.198, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\SqlSugar.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Text.Json, Version=9.0.0.7, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions">
+      <HintPath>..\..\Using\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClassLib\DataConvertUtils.cs" />
+    <Compile Include="ClassLib\DynamicJson.cs" />
+    <Compile Include="ClassLib\File\BitmapFormat.cs" />
+    <Compile Include="ClassLib\File\CalculateBase.cs" />
+    <Compile Include="ClassLib\InputUtils.cs" />
+    <Compile Include="ClassLib\NetUtils.cs" />
+    <Compile Include="ClassLib\ScreenCapture.cs" />
+    <Compile Include="ControlLib\Axis\Arraw.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlLib\Axis\Arraw.designer.cs">
+      <DependentUpon>Arraw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlLib\Axis\AxisPar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlLib\Axis\AxisPar.designer.cs">
+      <DependentUpon>AxisPar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlLib\Axis\AxisState.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlLib\Axis\AxisState.designer.cs">
+      <DependentUpon>AxisState.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlLib\Axis\AxisState_Pos.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlLib\Axis\AxisState_Pos.Designer.cs">
+      <DependentUpon>AxisState_Pos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlLib\Axis\PoinCtrolt.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlLib\Axis\PoinCtrolt.designer.cs">
+      <DependentUpon>PoinCtrolt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlLib\IO\DI_control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlLib\IO\DI_control.Designer.cs">
+      <DependentUpon>DI_control.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlLib\IO\DO_control.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlLib\IO\DO_control.Designer.cs">
+      <DependentUpon>DO_control.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlLib\SFC\SFC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ClassLib\File\RConfig.cs" />
+    <Compile Include="ClassLib\File\RCopyPaste.cs" />
+    <Compile Include="ClassLib\File\RDgvTool.cs" />
+    <Compile Include="ClassLib\File\RExcel.cs" />
+    <Compile Include="ClassLib\File\RFile.cs" />
+    <Compile Include="ClassLib\File\RIni.cs" />
+    <Compile Include="ClassLib\File\RXml.cs" />
+    <Compile Include="ClassLib\LightController\LightController_Base.cs" />
+    <Compile Include="ClassLib\LightController\LightController_CST.cs" />
+    <Compile Include="ClassLib\File\DataConvertUtils.cs" />
+    <Compile Include="ClassLib\File\DataGridViewUtils.cs" />
+    <Compile Include="ClassLib\File\DynamicJson.cs" />
+    <Compile Include="ClassLib\File\ExtensionMethods.cs" />
+    <Compile Include="ClassLib\File\FileUtils.cs" />
+    <Compile Include="ClassLib\File\FTPUtils.cs" />
+    <Compile Include="ClassLib\File\HttpHelper.cs" />
+    <Compile Include="ClassLib\File\HttpTool.cs" />
+    <Compile Include="ClassLib\File\IniFileHelper.cs" />
+    <Compile Include="ClassLib\File\INIUtils.cs" />
+    <Compile Include="ClassLib\File\InputUtils.cs" />
+    <Compile Include="ClassLib\File\IOHelper.cs" />
+    <Compile Include="ClassLib\File\Method.cs" />
+    <Compile Include="ClassLib\PluginTool\RColor.cs" />
+    <Compile Include="ClassLib\PluginTool\RDrive.cs" />
+    <Compile Include="ClassLib\PluginTool\REnum.cs" />
+    <Compile Include="ClassLib\PluginTool\RParam.cs" />
+    <Compile Include="ClassLib\PluginTool\RStartSet.cs" />
+    <Compile Include="ClassLib\PluginTool\RString.cs" />
+    <Compile Include="ClassLib\File\NetUtils.cs" />
+    <Compile Include="ClassLib\File\NotifyPropertyChangedAttribute.cs" />
+    <Compile Include="ClassLib\File\NPOIExcel.cs" />
+    <Compile Include="HelperTool\CsvHelper.cs" />
+    <Compile Include="HelperTool\ExcelNPOI.cs" />
+    <Compile Include="HelperTool\ExtensionUIMethods.cs" />
+    <Compile Include="HelperTool\IniHelper.cs" />
+    <Compile Include="HelperTool\LanguageMgr.cs" />
+    <Compile Include="HelperTool\LogHelper.cs" />
+    <Compile Include="HelperTool\MathHelper.cs" />
+    <Compile Include="HelperTool\PinnedObject.cs" />
+    <Compile Include="HelperTool\ProjectMgr.cs" />
+    <Compile Include="HelperTool\RegistorHelper.cs" />
+    <Compile Include="HelperTool\SafeBufferExt.cs" />
+    <Compile Include="HelperTool\Security.cs" />
+    <Compile Include="HelperTool\SerializerHelper.cs" />
+    <Compile Include="HelperTool\SingletonTemplate.cs" />
+    <Compile Include="HelperTool\SystemHelper.cs" />
+    <Compile Include="HelperTool\TCPServer.cs" />
+    <Compile Include="HelperTool\UI\FormSplash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HelperTool\UI\FormSplash.Designer.cs">
+      <DependentUpon>FormSplash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HelperTool\UI\ToolTipComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="HelperTool\ZipHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ClassLib\Register\HotKeyManager.cs" />
+    <Compile Include="ClassLib\Register\MD5Encryption.cs" />
+    <Compile Include="ClassLib\Register\User32API.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ClassLib\PropertyOrderAttribute.cs" />
+    <Compile Include="ClassLib\StyleUtils.cs" />
+    <Compile Include="ClassLib\TicksHelper.cs" />
+    <Compile Include="ClassLib\TimeoutWatch.cs" />
+    <Compile Include="ClassLib\Upload.cs" />
+    <Compile Include="ClassLib\XmlUtils.cs" />
+    <Compile Include="ClassLib\ZipUtils.cs" />
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ControlLib\Axis\Arraw.resx">
+      <DependentUpon>Arraw.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlLib\Axis\AxisPar.resx">
+      <DependentUpon>AxisPar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlLib\Axis\AxisState.resx">
+      <DependentUpon>AxisState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlLib\Axis\AxisState_Pos.resx">
+      <DependentUpon>AxisState_Pos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlLib\Axis\PoinCtrolt.resx">
+      <DependentUpon>PoinCtrolt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlLib\IO\DI_control.resx">
+      <DependentUpon>DI_control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlLib\IO\DO_control.resx">
+      <DependentUpon>DO_control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlLib\SFC\SFC.resx">
+      <DependentUpon>SFC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HelperTool\UI\FormSplash.resx">
+      <DependentUpon>FormSplash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+    <None Include="app.config" />
+    <None Include="Resources\Warn.png" />
+    <None Include="Resources\Tip.png" />
+    <None Include="Resources\按钮 %282%29.png" />
+    <None Include="Resources\ButtonDown.png" />
+    <None Include="Resources\ButtonUp.png" />
+    <None Include="Resources\Error.png" />
+    <Content Include="Resources\green_light.bmp" />
+    <None Include="Resources\max.png" />
+    <None Include="Resources\min.png" />
+    <Content Include="Resources\red_light.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\上.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\上-.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\下.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\下-.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\右.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\右-.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\左.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\左-.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

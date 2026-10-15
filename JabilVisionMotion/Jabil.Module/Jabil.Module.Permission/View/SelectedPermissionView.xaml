@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="Jabil.Module.Permission.View.SelectedPermissionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Jabil.Module.Permission.View"
+             xmlns:dto="clr-namespace:Jabil.Module.Permission.Common"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:permission="clr-namespace:Jabil.Module.Permission"
+             d:DataContext="{x:Type dto:PermissionDto}"
+             mc:Ignorable="d"     Width="800"
+    Height="auto"
+             d:DesignHeight="450" d:DesignWidth="800" Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Jabil.Module.Permission;component/Permission.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style  TargetType="TreeView">
+                <Setter Property="BorderBrush" Value="#AAAAAA"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Margin" Value="100"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeView}">
+                            <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                                <Grid Grid.IsSharedSizeScope="True">
+
+                                    <permission:MagicStackPanel 
+                                        VerticalAlignment="Top"
+                                        ItemHeight="{Binding ElementName=Items, Path=ActualHeight}">
+                                    </permission:MagicStackPanel>
+                                    <ItemsPresenter x:Name="Items" Grid.Row="1" Grid.ColumnSpan="3" VerticalAlignment="Top"/>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="Margin" Value="20,5,10,5"/>
+                <Setter Property="Background" Value="#12B1EB"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Margin="15"
+            FontSize="18"
+            FontWeight="Bold"
+            Text="权限" />
+        <ScrollViewer Grid.Row="1">
+            <TreeView Margin="10,5"
+            
+            ItemsSource="{Binding  Children}">
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate DataType="{x:Type dto:PermissionDto}" ItemsSource="{Binding Children }" >
+                        <StackPanel Height="36" VerticalAlignment="Bottom" Orientation="Horizontal">
+                            <CheckBox Content="{Binding TitleName}" VerticalContentAlignment="Center" Background="#12B1EB" Style="{StaticResource  MaterialDesignCheckBox}" IsChecked="{Binding IsCheck}"  VerticalAlignment="Center" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+
+                </TreeView.Resources>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                        <Setter Property="Padding" Value="0"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+
+
+
+            </TreeView>
+        </ScrollViewer>
+
+        <StackPanel
+            Grid.Row="2"
+            Margin="15"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Margin="0,0,10,0"
+                Padding="10,5"
+                Background="#AAAAAA"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                Content="取消" />
+            <Button
+                Padding="10,5"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                CommandParameter="{Binding}"
+                Content="确认" />
+        </StackPanel>
+    </Grid>
+</UserControl>

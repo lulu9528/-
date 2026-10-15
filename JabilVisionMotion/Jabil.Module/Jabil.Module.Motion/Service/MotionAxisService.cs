@@ -1,0 +1,35 @@
+﻿using Jabil.Lib.Common;
+using Jabil.Lib.SQLHelper;
+using Jabil.Module.Log.Lib;
+using Jabil.Module.Motion.Common.Dtos;
+using Jabil.Module.Motion.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Jabil.Module.Motion.Service
+{
+    /// <summary>
+    /// 运动轴服务
+    /// </summary>
+    public class MotionAxisService : MotionServiceBase<MotionAxisEntity, MotionAxisDto>
+    {
+        protected override async Task<bool> ExistsAsync(MotionAxisDto dto)
+        {
+            return await SugarSQLHelper.Instance.DB
+                .Queryable<MotionAxisEntity>()
+                .AnyAsync(x => x.轴名称 == dto.轴名称);
+        }
+
+        protected override async Task<MotionAxisEntity> GetExistingEntityAsync(MotionAxisDto dto)
+        {
+            return await SugarSQLHelper.Instance.DB
+                .Queryable<MotionAxisEntity>()
+                .SingleAsync(x => x.轴名称 == dto.轴名称);
+        }
+
+        protected override string GetEntityName() => "运动轴";
+    }
+}

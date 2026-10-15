@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A7348E60-5C66-4B87-8AF9-37E39778A018}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Jabil.Module.Alarm</RootNamespace>
+    <AssemblyName>Jabil.Module.Alarm</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\JabilVisionMotion\JabilVisionMotion\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\JabilVisionMotion\JabilVisionMotion\bin\Debug\Jabil.Module.Alarm.xml</DocumentationFile>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\Using\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Data">
+      <HintPath>..\..\Using\AutoMapper.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Npgsql, Version=4.1.14.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\Using\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\..\Using\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\Using\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\..\Using\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlSugar">
+      <HintPath>..\..\Using\SqlSugar.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlSugar.Access">
+      <HintPath>..\..\Using\SqlSugar.Access.dll</HintPath>
+    </Reference>
+    <Reference Include="SunnyUI">
+      <HintPath>..\..\Using\SunnyUI.dll</HintPath>
+    </Reference>
+    <Reference Include="SunnyUI.Common">
+      <HintPath>..\..\Using\SunnyUI.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.7, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\AutoMapperProFile.cs" />
+    <Compile Include="Common\BaseDto.cs" />
+    <Compile Include="Common\Dtos\AlarmCommunicationDIODto.cs" />
+    <Compile Include="Common\Dtos\ProcessErrorDto.cs" />
+    <Compile Include="Control\AlarmView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\AlarmView.designer.cs">
+      <DependentUpon>AlarmView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entity\BaseEntity.cs" />
+    <Compile Include="Entity\AlarmCommunicationDIOEntity.cs" />
+    <Compile Include="Entity\ProcessErrorEntity.cs" />
+    <Compile Include="Frm\Frm_Alarm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_Alarm.Designer.cs">
+      <DependentUpon>Frm_Alarm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm\Frm_AlarmTop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_AlarmTop.Designer.cs">
+      <DependentUpon>Frm_AlarmTop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm\Frm_Operation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_Operation.Designer.cs">
+      <DependentUpon>Frm_Operation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\IniConfig.cs" />
+    <Compile Include="AlarmSystem.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\AutoMapperHelper.cs" />
+    <Compile Include="Service\AlarmCommunicationDIOService.cs" />
+    <Compile Include="Service\AlarmServiceBase.cs" />
+    <Compile Include="Service\ProcessErrorService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Control\AlarmView.resx">
+      <DependentUpon>AlarmView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_Alarm.resx">
+      <DependentUpon>Frm_Alarm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_AlarmTop.resx">
+      <DependentUpon>Frm_AlarmTop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_Operation.resx">
+      <DependentUpon>Frm_Operation.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\BasicClassLibrary\BasicClassLibrary\BasicClassLibrary.csproj">
+      <Project>{7c794049-f2cc-4b57-a798-abde460fbba5}</Project>
+      <Name>BasicClassLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Jabil.Lib\Jabil.Lib.csproj">
+      <Project>{DC8467E0-5049-44D8-ACAC-E4676EA95670}</Project>
+      <Name>Jabil.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jabil.Module.Log\Jabil.Module.Log.csproj">
+      <Project>{81f88fa8-aaa2-4e1d-b088-5a7f1fd0acb1}</Project>
+      <Name>Jabil.Module.Log</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

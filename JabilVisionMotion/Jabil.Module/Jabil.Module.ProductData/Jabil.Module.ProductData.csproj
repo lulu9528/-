@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FAD51EDA-99F7-41A4-99C5-807B73E7B89D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Jabil.Module.ProductData</RootNamespace>
+    <AssemblyName>Jabil.Module.ProductData</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\JabilVisionMotion\JabilVisionMotion\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\JabilVisionMotion\JabilVisionMotion\bin\Debug\Jabil.Module.ProductData.xml</DocumentationFile>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\..\Using\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql, Version=4.1.14.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="SqlSugar, Version=5.1.4.198, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\SqlSugar.dll</HintPath>
+    </Reference>
+    <Reference Include="SunnyUI">
+      <HintPath>..\..\Using\SunnyUI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Using\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Frm\Frm_NgStatistics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_NgStatistics.designer.cs">
+      <DependentUpon>Frm_NgStatistics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm\Frm_UtilizationRate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_UtilizationRate.designer.cs">
+      <DependentUpon>Frm_UtilizationRate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm\Frm_MaterialThrowingRate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_MaterialThrowingRate.designer.cs">
+      <DependentUpon>Frm_MaterialThrowingRate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frm\Frm_Yield.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\Frm_Yield.designer.cs">
+      <DependentUpon>Frm_Yield.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\CtCsvLogger.cs" />
+    <Compile Include="Lib\NgStatistics.cs" />
+    <Compile Include="Lib\Yield.cs" />
+    <Compile Include="Lib\MaterialThrowingRate.cs" />
+    <Compile Include="Lib\UtilizationRate.cs" />
+    <Compile Include="Lib\OutputStatistics.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Frm\Frm_NgStatistics.en-US.resx">
+      <DependentUpon>Frm_NgStatistics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_NgStatistics.resx">
+      <DependentUpon>Frm_NgStatistics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_UtilizationRate.resx">
+      <DependentUpon>Frm_UtilizationRate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_MaterialThrowingRate.en-US.resx">
+      <DependentUpon>Frm_MaterialThrowingRate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_MaterialThrowingRate.resx">
+      <DependentUpon>Frm_MaterialThrowingRate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_Yield.en-US.resx">
+      <DependentUpon>Frm_Yield.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\Frm_Yield.resx">
+      <DependentUpon>Frm_Yield.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\BasicClassLibrary\BasicClassLibrary\BasicClassLibrary.csproj">
+      <Project>{7c794049-f2cc-4b57-a798-abde460fbba5}</Project>
+      <Name>BasicClassLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Jabil.Lib\Jabil.Lib.csproj">
+      <Project>{dc8467e0-5049-44d8-acac-e4676ea95670}</Project>
+      <Name>Jabil.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jabil.Module.Log\Jabil.Module.Log.csproj">
+      <Project>{81f88fa8-aaa2-4e1d-b088-5a7f1fd0acb1}</Project>
+      <Name>Jabil.Module.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jabil.Module.Permission\Jabil.Module.Permission.csproj">
+      <Project>{5760637A-5862-4C1E-BC0C-EA693CDFC262}</Project>
+      <Name>Jabil.Module.Permission</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,528 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="refreshTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="uiSplitContainer1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="uiSplitContainer1.IsSplitterFixed" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="uiSplitContainer1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="uiSplitContainer1.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>20, 20</value>
+  </data>
+  <data name="uiSplitContainer1.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
+    <value>Horizontal</value>
+  </data>
+  <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanel2.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="_previousShiftGridView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="_previousShiftGridView.Font" type="System.Drawing.Font, System.Drawing">
+    <value>宋体, 12pt</value>
+  </data>
+  <data name="_previousShiftGridView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 32</value>
+  </data>
+  <data name="_previousShiftGridView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>348, 425</value>
+  </data>
+  <data name="_previousShiftGridView.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;_previousShiftGridView.Name" xml:space="preserve">
+    <value>_previousShiftGridView</value>
+  </data>
+  <data name="&gt;&gt;_previousShiftGridView.Type" xml:space="preserve">
+    <value>Sunny.UI.UIDataGridView, SunnyUI, Version=3.7.0.0, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb</value>
+  </data>
+  <data name="&gt;&gt;_previousShiftGridView.Parent" xml:space="preserve">
+    <value>_previousShiftGroupBox</value>
+  </data>
+  <data name="&gt;&gt;_previousShiftGridView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="_previousShiftGroupBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="_previousShiftGroupBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>宋体, 12pt</value>
+  </data>
+  <data name="_previousShiftGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>359, 5</value>
+  </data>
+  <data name="_previousShiftGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 5, 4, 5</value>
+  </data>
+  <data name="_previousShiftGroupBox.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>1, 1</value>
+  </data>
+  <data name="_previousShiftGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 32, 0, 0</value>
+  </data>
+  <data name="_previousShiftGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>348, 457</value>
+  </data>
+  <data name="_previousShiftGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="_previousShiftGroupBox.Text" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="&gt;&gt;_previousShiftGroupBox.Name" xml:space="preserve">
+    <value>_previousShiftGroupBox</value>
+  </data>
+  <data name="&gt;&gt;_previousShiftGroupBox.Type" xml:space="preserve">
+    <value>Sunny.UI.UIGroupBox, SunnyUI, Version=3.7.0.0, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb</value>
+  </data>
+  <data name="&gt;&gt;_previousShiftGroupBox.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="&gt;&gt;_previousShiftGroupBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="_currentShiftGridView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="_currentShiftGridView.Font" type="System.Drawing.Font, System.Drawing">
+    <value>宋体, 12pt</value>
+  </data>
+  <data name="_currentShiftGridView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 32</value>
+  </data>
+  <data name="_currentShiftGridView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>347, 425</value>
+  </data>
+  <data name="_currentShiftGridView.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;_currentShiftGridView.Name" xml:space="preserve">
+    <value>_currentShiftGridView</value>
+  </data>
+  <data name="&gt;&gt;_currentShiftGridView.Type" xml:space="preserve">
+    <value>Sunny.UI.UIDataGridView, SunnyUI, Version=3.7.0.0, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb</value>
+  </data>
+  <data name="&gt;&gt;_currentShiftGridView.Parent" xml:space="preserve">
+    <value>_currentShiftGroupBox</value>
+  </data>
+  <data name="&gt;&gt;_currentShiftGridView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="_currentShiftGroupBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="_currentShiftGroupBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>宋体, 12pt</value>
+  </data>
+  <data name="_currentShiftGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 5</value>
+  </data>
+  <data name="_currentShiftGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 5, 4, 5</value>
+  </data>
+  <data name="_currentShiftGroupBox.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>1, 1</value>
+  </data>
+  <data name="_currentShiftGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 32, 0, 0</value>
+  </data>
+  <data name="_currentShiftGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>347, 457</value>
+  </data>
+  <data name="_currentShiftGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="_currentShiftGroupBox.Text" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="&gt;&gt;_currentShiftGroupBox.Name" xml:space="preserve">
+    <value>_currentShiftGroupBox</value>
+  </data>
+  <data name="&gt;&gt;_currentShiftGroupBox.Type" xml:space="preserve">
+    <value>Sunny.UI.UIGroupBox, SunnyUI, Version=3.7.0.0, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb</value>
+  </data>
+  <data name="&gt;&gt;_currentShiftGroupBox.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="&gt;&gt;_currentShiftGroupBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanel2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanel2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 32</value>
+  </data>
+  <data name="tableLayoutPanel2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tableLayoutPanel2.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>711, 467</value>
+  </data>
+  <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Name" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="_previousShiftGroupBox" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="_currentShiftGroupBox" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="btnClearData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="btnClearData.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnClearData.Font" type="System.Drawing.Font, System.Drawing">
+    <value>宋体, 12pt, style=Bold</value>
+  </data>
+  <data name="btnClearData.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnClearData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>636, 0</value>
+  </data>
+  <data name="btnClearData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 32</value>
+  </data>
+  <data name="btnClearData.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="btnClearData.Text" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="&gt;&gt;btnClearData.Name" xml:space="preserve">
+    <value>btnClearData</value>
+  </data>
+  <data name="&gt;&gt;btnClearData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnClearData.Parent" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;btnClearData.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="_datePicker.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="_datePicker.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 26</value>
+  </data>
+  <data name="_datePicker.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;_datePicker.Name" xml:space="preserve">
+    <value>_datePicker</value>
+  </data>
+  <data name="&gt;&gt;_datePicker.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DateTimePicker, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;_datePicker.Parent" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;_datePicker.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="panel2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="panel2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panel2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="panel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>711, 32</value>
+  </data>
+  <data name="panel2.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;panel2.Name" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;panel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel2.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;panel2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tableLayoutPanel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>711, 499</value>
+  </data>
+  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
+    <value>uiSplitContainer1.Panel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tableLayoutPanel2" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="panel2" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,4,Percent,58" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Panel1.Name" xml:space="preserve">
+    <value>uiSplitContainer1.Panel1</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Panel1.Parent" xml:space="preserve">
+    <value>uiSplitContainer1</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Panel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="_yieldChart.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="_yieldChart.Font" type="System.Drawing.Font, System.Drawing">
+    <value>宋体, 12pt</value>
+  </data>
+  <data name="_yieldChart.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="_yieldChart.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>1, 1</value>
+  </data>
+  <data name="_yieldChart.Size" type="System.Drawing.Size, System.Drawing">
+    <value>711, 36</value>
+  </data>
+  <data name="_yieldChart.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;_yieldChart.Name" xml:space="preserve">
+    <value>_yieldChart</value>
+  </data>
+  <data name="&gt;&gt;_yieldChart.Type" xml:space="preserve">
+    <value>Sunny.UI.UIBarChart, SunnyUI, Version=3.7.0.0, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb</value>
+  </data>
+  <data name="&gt;&gt;_yieldChart.Parent" xml:space="preserve">
+    <value>uiSplitContainer1.Panel2</value>
+  </data>
+  <data name="&gt;&gt;_yieldChart.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Panel2.Name" xml:space="preserve">
+    <value>uiSplitContainer1.Panel2</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Panel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Panel2.Parent" xml:space="preserve">
+    <value>uiSplitContainer1</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Panel2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="uiSplitContainer1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>711, 546</value>
+  </data>
+  <data name="uiSplitContainer1.SplitterDistance" type="System.Int32, mscorlib">
+    <value>499</value>
+  </data>
+  <data name="uiSplitContainer1.SplitterWidth" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="uiSplitContainer1.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Name" xml:space="preserve">
+    <value>uiSplitContainer1</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Type" xml:space="preserve">
+    <value>Sunny.UI.UISplitContainer, SunnyUI, Version=3.7.0.0, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;uiSplitContainer1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>711, 546</value>
+  </data>
+  <data name="&gt;&gt;refreshTimer.Name" xml:space="preserve">
+    <value>refreshTimer</value>
+  </data>
+  <data name="&gt;&gt;refreshTimer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Frm_Yield</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Sunny.UI.UIPage, SunnyUI, Version=3.7.0.0, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb</value>
+  </data>
+</root>

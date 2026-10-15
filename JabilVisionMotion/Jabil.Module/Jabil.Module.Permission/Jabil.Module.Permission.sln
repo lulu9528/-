@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jabil.Module.Permission", "Jabil.Module.Permission.csproj", "{5760637A-5862-4C1E-BC0C-EA693CDFC262}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jabil.Module.DF", "..\Jabil.Module.DF\Jabil.Module.DF.csproj", "{1A1B627B-3597-4E5D-9C69-92B5110C848A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jabil.Plugin", "..\Jabil.Plugin\Jabil.Plugin.csproj", "{2781460E-486B-4F0E-B60F-AD525E51AC11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginTest", "..\PluginTest\PluginTest.csproj", "{CF4BDD53-FF12-42B2-A6ED-5459B169C5E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTransPlugin", "..\DataTransPlugin\DataTransPlugin.csproj", "{D6BEAD1B-AC06-4B15-A761-94616ECBC546}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kaine.Vision.Core", "..\Kaine.Vision.Core\Kaine.Vision.Core.csproj", "{3BA683B3-C82A-415A-88B9-5601725641A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5760637A-5862-4C1E-BC0C-EA693CDFC262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5760637A-5862-4C1E-BC0C-EA693CDFC262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5760637A-5862-4C1E-BC0C-EA693CDFC262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5760637A-5862-4C1E-BC0C-EA693CDFC262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1B627B-3597-4E5D-9C69-92B5110C848A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1B627B-3597-4E5D-9C69-92B5110C848A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1B627B-3597-4E5D-9C69-92B5110C848A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1B627B-3597-4E5D-9C69-92B5110C848A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2781460E-486B-4F0E-B60F-AD525E51AC11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2781460E-486B-4F0E-B60F-AD525E51AC11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2781460E-486B-4F0E-B60F-AD525E51AC11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2781460E-486B-4F0E-B60F-AD525E51AC11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF4BDD53-FF12-42B2-A6ED-5459B169C5E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF4BDD53-FF12-42B2-A6ED-5459B169C5E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF4BDD53-FF12-42B2-A6ED-5459B169C5E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF4BDD53-FF12-42B2-A6ED-5459B169C5E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6BEAD1B-AC06-4B15-A761-94616ECBC546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6BEAD1B-AC06-4B15-A761-94616ECBC546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6BEAD1B-AC06-4B15-A761-94616ECBC546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6BEAD1B-AC06-4B15-A761-94616ECBC546}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BA683B3-C82A-415A-88B9-5601725641A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BA683B3-C82A-415A-88B9-5601725641A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BA683B3-C82A-415A-88B9-5601725641A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BA683B3-C82A-415A-88B9-5601725641A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2FE29EAE-0970-4F85-B231-13C9B31E1C58}
+	EndGlobalSection
+EndGlobal

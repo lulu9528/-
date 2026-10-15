@@ -1,0 +1,132 @@
+﻿<UserControl x:Class="Jabil.Module.Permission.View.AddUserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Jabil.Module.Permission.View"
+             xmlns:permission="clr-namespace:Jabil.Module.Permission"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:entity="clr-namespace:Jabil.Module.Permission.Common"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DataContext="{x:Type entity:UserDto}"
+             mc:Ignorable="d"     Width="480" MinHeight="260" Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Jabil.Module.Permission;component/Permission.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="Margin" Value="20,5,10,5"/>
+                <Setter Property="Background" Value="#12B1EB"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+        <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <materialDesign:Snackbar Grid.Row="0"
+                x:Name="SnakeBar"
+                Panel.ZIndex="1"
+                Background="#90a4ae"
+                DockPanel.Dock="Top"
+                MessageQueue="{materialDesign:MessageQueue}" />
+        <TextBlock Grid.Row="0"
+                Margin="20,10"
+                FontSize="25"
+                FontWeight="Bold"
+                Text="添加用户" />
+        <TabControl x:Name="tabControl"  Grid.Row="1" Margin="5" TabStripPlacement="Left"  SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="密码用户" >
+                <StackPanel Margin="40,10" VerticalAlignment="Center">
+                    <TextBox Margin="0,10"
+                VerticalAlignment="Center"
+                     materialDesign:TextFieldAssist.PrefixText="名称："
+                materialDesign:HintAssist.Hint="请输入用户名" 
+                Text="{Binding UserName}" />
+
+                    <TextBox Margin="0,10"
+                VerticalAlignment="Center"
+                     materialDesign:TextFieldAssist.PrefixText="账号："
+                materialDesign:HintAssist.Hint="请输入账号"
+                Text="{Binding Account}" />
+
+                    <PasswordBox   FontSize="16" Margin="0,10"
+                         BorderThickness="0" materialDesign:HintAssist.Hint="请输入密码"
+                           materialDesign:TextFieldAssist.PrefixText="密码："
+                         Style="{StaticResource MaterialDesignPasswordBox}"
+                         permission:PassWordEx.PassWord="{Binding PassWord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Behaviors>
+                            <permission:PasswordBehavior/>
+                        </i:Interaction.Behaviors>
+                    </PasswordBox>
+                    <ComboBox Margin="0,5" materialDesign:HintAssist.Hint="请选择账户角色" 
+                      ItemsSource="{Binding Source={x:Static permission:PermissionSystem.Instance},Path=Roles}"
+                      DisplayMemberPath="RoleName" SelectedValuePath="RoleName"
+                      materialDesign:TextFieldAssist.PrefixText="角色："
+                      SelectedValue="{Binding RoleKey}"/>
+
+
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="刷卡用户">
+                <StackPanel Margin="40,10" VerticalAlignment="Center">
+                    <TextBox Margin="0,10"
+                VerticalAlignment="Center"
+                     materialDesign:TextFieldAssist.PrefixText="名称："
+                materialDesign:HintAssist.Hint="请输入用户名" 
+                Text="{Binding UserName}" />
+                    <TextBox Margin="0,10"
+                VerticalAlignment="Center"
+                     materialDesign:TextFieldAssist.PrefixText="ID："
+                materialDesign:HintAssist.Hint="请刷卡写入账号ID" 
+                Text="{Binding EmpNo}" />
+                    <!--<PasswordBox   FontSize="16" Margin="0,10"
+                         BorderThickness="0" materialDesign:HintAssist.Hint="请刷卡写入账号ID"
+                           materialDesign:TextFieldAssist.PrefixText="ID："
+                         Style="{StaticResource MaterialDesignPasswordBox}"
+                         permission:PassWordEx.PassWord="{Binding  EmpNo,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Behaviors>
+                            <permission:PasswordBehavior/>
+                        </i:Interaction.Behaviors>
+                    </PasswordBox>-->
+                    <ComboBox Margin="0,5" materialDesign:HintAssist.Hint="请选择账户角色" 
+                      ItemsSource="{Binding Source={x:Static permission:PermissionSystem.Instance},Path=Roles}"
+                      DisplayMemberPath="RoleName" SelectedValuePath="RoleName"
+                      materialDesign:TextFieldAssist.PrefixText="角色："
+                      SelectedValue="{Binding RoleKey}"
+                      />
+
+
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+
+        <StackPanel
+            Grid.Row="2"
+            Margin="15"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Margin="0,0,10,0"
+                Padding="10,5"
+                Background="#AAAAAA"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                Content="取消" />
+            <Button
+                Padding="10,5"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                CommandParameter="{Binding}"
+                Content="确认" />
+        </StackPanel>
+    </Grid>
+
+
+</UserControl>

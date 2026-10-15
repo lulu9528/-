@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="Jabil.Module.Permission.View.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Jabil.Module.Permission.View"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:permission="clr-namespace:Jabil.Module.Permission"
+             xmlns:comm="clr-namespace:Jabil.Module.Permission.Common"
+             d:DataContext="{x:Type comm:LoginUserDto}"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" FocusManager.IsFocusScope="True"
+              
+         Height="360" Width="480">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Jabil.Module.Permission;component/Permission.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
+    <Grid Width="480" Background="White" FocusManager.IsFocusScope="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+
+            <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <materialDesign:Snackbar
+            x:Name="LoginSnakeBar"
+            Panel.ZIndex="1"
+             Grid.RowSpan="2"
+            MessageQueue="{materialDesign:MessageQueue}" Margin="5" Grid.Row="5" Background="#002B49"/>
+
+            <Border Grid.Row="0" Background="#002B49" ClipToBounds="True">
+                <Image Height="40"   Stretch="Uniform"   Source="{Binding Source={x:Static permission:BitmapFactory.LoginTitle}}" />
+
+            </Border>
+        <TabControl  Grid.Row="1" Style="{StaticResource    MaterialDesignUniformTabControl}"  
+                     x:Name="tabControl" 
+                     SelectionChanged="TabControl_SelectionChanged"
+                     materialDesign:TabAssist.HasFilledTab="False" Margin="5">
+            <TabItem Header="账号密码登录">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="68,20" Grid.RowSpan="2">
+                        <materialDesign:PackIcon Height="24" Width="24" Kind="User" VerticalAlignment="Center"/>
+                        <TextBox x:Name="tbUsername" Width="200"  Margin="10,0" TabIndex="0"
+                     Text="{Binding Account}"
+                     materialDesign:HintAssist.Hint="UserName" 
+                     />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="68,10">
+                        <materialDesign:PackIcon Height="24" Width="24" Kind="Password" VerticalAlignment="Center"/>
+
+                        <PasswordBox x:Name="tbPassword" Width="200" Margin="10,0" TabIndex="1"
+                         materialDesign:HintAssist.Hint="Password"
+                         permission:PassWordEx.PassWord="{Binding PassWord,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                            <i:Interaction.Behaviors>
+                                <permission:PasswordBehavior/>
+                            </i:Interaction.Behaviors>
+                        </PasswordBox>
+
+                    </StackPanel>
+                    <Button Grid.Row="5" x:Name="btnLogin" Content="Login" Width="200" Height="30" Background="#12B1EB"  TabIndex="2"
+                Command="{Binding ConfirmCommand}"
+
+                Margin="90,40"  BorderThickness="0" 
+                FontSize="16" FontWeight="Bold"/>
+                </StackPanel>
+
+            </TabItem>
+            <TabItem Header="刷卡登录" Loaded="TabItem_Loaded" Unloaded="TabItem_Unloaded">
+                <StackPanel>
+                    <TextBlock Text="请刷卡登录..." VerticalAlignment="Center"  Margin="5" HorizontalAlignment="Center"/>
+                    <Grid>
+                        <!--<TextBox x:Name="cardInput"  Width="200" VerticalAlignment="Center" Visibility="Visible" Opacity="0"
+                                 DataObject.Pasting="cardInput_Pasting"
+                                 />-->
+                        <PasswordBox   FontSize="16" Margin="0,10" x:Name="cardInput" Width="200" Opacity="0"
+                         BorderThickness="0" materialDesign:HintAssist.Hint="请输入密码" DataObject.Pasting="cardInput_Pasting"
+                           materialDesign:TextFieldAssist.PrefixText="密码："
+                         Style="{StaticResource MaterialDesignPasswordBox}"
+                         >
+
+                        </PasswordBox>
+                        <materialDesign:PackIcon  Kind="CreditCardContactless"  x:Name="card"
+                                          Foreground="#002B49" Height="150" Width="250" 
+                                          VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                    </Grid>
+
+                </StackPanel>
+
+
+            </TabItem>
+
+        </TabControl>
+        
+
+            <!--<Button Grid.Row="6" x:Name="btnCancel" Content="Cancel" Width="200" Height="30" 
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                Margin="90,20"  BorderThickness="0" 
+                FontSize="16" FontWeight="Bold"/>-->
+        </Grid>
+
+
+</UserControl>

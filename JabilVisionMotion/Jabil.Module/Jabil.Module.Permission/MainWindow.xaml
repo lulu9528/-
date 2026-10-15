@@ -1,0 +1,48 @@
+﻿<Window 
+    x:Class="Jabil.Module.Permission.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Jabil.Module.Permission"
+    xmlns:view="clr-namespace:Jabil.Module.Permission.View"
+    mc:Ignorable="d"
+    Title="MainWindow" 
+    Height="450" 
+    Width="800">
+    <!--
+    权限模块主窗口 XAML
+    
+    命名空间说明：
+    - xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"：WPF核心控件命名空间
+    - xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"：XAML语言命名空间
+    - xmlns:d：Blend设计时命名空间（设计模式下使用）
+    - xmlns:mc：标记兼容性命名空间，用于指定忽略的属性
+    - xmlns:local：当前项目的Permission命名空间
+    - xmlns:view：权限模块视图所在的命名空间（包含MenuView、MainView等）
+    
+    属性说明：
+    - mc:Ignorable="d"：指定设计时属性(d:)在运行时可被忽略
+    - Title：窗口标题
+    - Height/Width：窗口初始大小（450x800）
+    -->
+
+    <!-- 主容器：使用Grid进行布局，分为两行 -->
+    <Grid>
+        <!-- 定义网格行结构 -->
+        <Grid.RowDefinitions>
+            <!-- 第一行：高度自适应内容（auto），用于放置菜单栏 -->
+            <RowDefinition Height="auto"/>
+            <!-- 第二行：占据剩余所有空间（*），用于放置主内容区域 -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 菜单栏视图：位于第一行（默认Row=0） -->
+        <!-- 引用view命名空间下的MenuView用户控件，显示应用程序菜单 -->
+        <view:MenuView/>
+
+        <!-- 主内容视图：位于第二行（Grid.Row="1"） -->
+        <!-- 引用view命名空间下的MainView用户控件，显示主要功能内容 -->
+        <view:MainView Grid.Row="1"/>
+    </Grid>
+</Window>

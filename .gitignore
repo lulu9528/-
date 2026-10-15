@@ -1,0 +1,29 @@
+# ===== 构建产物 =====
+bin/
+obj/
+*.user
+
+# ===== 依赖与缓存 =====
+Using/
+downloads/
+packages/
+*.nupkg
+
+# ===== 数据库与备份 =====
+*.accdb
+*.bak
+*.backup
+backup/
+*.log
+Log/
+logs/
+
+# ===== 编辑器/工具 =====
+.vs/
+.idea/
+*.suo
+*.cache
+
+# ===== 临时 =====
+*.tmp
+*~

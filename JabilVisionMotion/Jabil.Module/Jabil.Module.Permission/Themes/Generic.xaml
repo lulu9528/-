@@ -1,0 +1,14 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Jabil.Module.Permission">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Jabil.Module.Permission;component/Permission.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+
+
+    <Style TargetType="{x:Type local:NoPasteTextBox}"  BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+
+    </Style>
+</ResourceDictionary>

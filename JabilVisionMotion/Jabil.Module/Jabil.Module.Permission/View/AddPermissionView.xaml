@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="Jabil.Module.Permission.View.AddPermissionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Jabil.Module.Permission.View"
+             xmlns:permission="clr-namespace:Jabil.Module.Permission"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:entity="clr-namespace:Jabil.Module.Permission.Common"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DataContext="{x:Type entity:PermissionDto}"
+             mc:Ignorable="d"     Width="480" Height="320" Background="White">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Jabil.Module.Permission;component/Permission.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="Margin" Value="20,5,10,5"/>
+                <Setter Property="Background" Value="#12B1EB"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock
+                Margin="20,10"
+                FontSize="25"
+                FontWeight="Bold"
+                Text="添加权限" />
+        <StackPanel Grid.Row="1" Margin="40,10" VerticalAlignment="Center">
+            <TextBox Text="{Binding ID}" Margin="0,10" IsEnabled="False" materialDesign:TextFieldAssist.PrefixText="ID："/>
+
+            <TextBox Text="{Binding Path}" Margin="0,10" IsEnabled="False" materialDesign:TextFieldAssist.PrefixText="路径："  VerticalContentAlignment="Bottom" />
+            <TextBox Margin="0,10"
+                materialDesign:HintAssist.Hint="请输入新建权限名称" 
+                materialDesign:TextFieldAssist.PrefixText="名称："
+                Text="{Binding   TitleName}" />
+
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="2"
+            Margin="15"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Margin="0,0,10,0"
+                Padding="10,5"
+                Background="#AAAAAA"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                Content="取消" />
+            <Button
+                Padding="10,5"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                CommandParameter="{Binding}"
+                Content="确认" />
+        </StackPanel>
+
+        <materialDesign:Snackbar
+                x:Name="SnakeBar"
+                Panel.ZIndex="1"
+                Background="#90a4ae"
+
+                MessageQueue="{materialDesign:MessageQueue}" />
+    </Grid>
+</UserControl>

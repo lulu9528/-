@@ -1,0 +1,17 @@
+﻿<Application x:Class="Jabil.Module.Permission.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Jabil.Module.Permission.View"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!--<ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+
+
+                <ResourceDictionary Source="pack://application:,,,/Jabil.Module.Permission;component/Permission.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>-->
+
+    </Application.Resources>
+</Application>

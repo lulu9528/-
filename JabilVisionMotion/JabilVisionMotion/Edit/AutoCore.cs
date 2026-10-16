@@ -1,7 +1,4 @@
-﻿using Cognex.VisionPro;
-using Cognex.VisionPro.CalibFix;
-using Cognex.VisionPro.ToolBlock;
-using csLTDMC;
+﻿using csLTDMC;
 using HslCommunication;
 using Jabil.Lib;
 using Jabil.Lib.Common;

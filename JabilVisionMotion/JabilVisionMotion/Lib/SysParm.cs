@@ -18,17 +18,12 @@ using Jabil.Module.Vision.Lib;
 using Jabil.Module.TCPIP;
 using Jabil.Module.Modbus;
 using Jabil.Module.Motion.Common.Dtos;
-using Cognex.VisionPro;
 using Jabil.Module.Modbus.Lib;
-using Cognex.VisionPro.CalibFix;
 using BasicClassLibrary.RexHelps;
 using JabilVisionMotion.Edit;
 using Jabil.Module.IO;
-using Cognex.VisionPro.ToolBlock;
 using csLTDMC;
 using System.Threading;
-using Cognex.VisionPro3D;
-using Cognex.VisionPro3D.Controls;
 using Jabil.Module.Serialport;
 using Jabil.Module.Serialport.Lib;
 using System.IO.Ports;
@@ -492,30 +487,6 @@ namespace JabilVisionMotion.Lib
                         Thread.Sleep(100);
                         continue;
                     }
-
-                    // 跳过已初始化的工具（避免重复加载，提升效率）
-                    if (!IsVisionToolUninitialized(tool))
-                        continue;
-
-                    // 构建工具路径：拼接应用根目录、产品名称、工具路径，形成完整.vpp文件路径
-                    string toolPath = HardwareInitUtil.BuildConfigPath(
-                        "Config", "Project", "Vision", "Job",
-                        Project.Instance.SystemParm.ProductName, // 当前产品名称（从全局项目配置中获取）
-                        tool.检测工具路径,
-                        $"{tool.检测工具名称}.vpp" // 工具文件名（固定为工具名称+.vpp）
-                    );
-
-                    // 触发进度回调（如UI显示"正在加载xxx工具"）
-                    progressAction?.Invoke(45, $"正在加载视觉工具：{toolPath}");
-
-                    // 加载工具并校验，失败则返回错误
-                    var loadResult = LoadVisionTool(tool, toolPath);
-                    if (!loadResult.Success)
-                        return new IniInfo(false, loadResult.ErrorMessage);
-
-                    // 加载成功后更新进度
-                    progressAction?.Invoke(45, $"视觉工具加载成功：{toolPath}");
-                    Thread.Sleep(100); // 预留加载时间（避免硬件资源竞争）
                 }
 
                 return new IniInfo(true, "视觉工具初始化成功");
@@ -546,24 +517,6 @@ namespace JabilVisionMotion.Lib
                 RLog.SaveError(ex);
                 return new IniInfo(false, $"LMI3D初始化异常：{ex.Message}");
             }
-        }
-
-        /// <summary>
-        /// 检查视觉工具是否未初始化
-        /// 根据工具类型（如CogAcqFifoTool、CogToolBlock）判断对应数组中是否为null
-        /// </summary>
-        /// <param name="tool">视觉工具配置DTO</param>
-        /// <returns>true=未初始化，false=已初始化</returns>
-        private bool IsVisionToolUninitialized(VisionToolDto tool)
-        {
-            return tool.检测工具类型 switch
-            {
-                "CogAcqFifoTool" => VisionSystem.AcqFifoTools[tool.检测工具索引] == null,
-                "CogToolBlockTool" => VisionSystem.ToolBlocks[tool.检测工具索引] == null,
-                "CogCalibNPointToNPointTool" => VisionSystem.CalibNPointTools[tool.检测工具索引] == null,
-                "CogCalibCheckerboardTool" => VisionSystem.CalibCheckerboardTools[tool.检测工具索引] == null,
-                _ => false // 未知类型默认视为已初始化（避免重复处理）
-            };
         }
 
         /// <summary>
@@ -621,44 +574,6 @@ namespace JabilVisionMotion.Lib
             }
         }
 
-        /// <summary>
-        /// 加载视觉工具（根据类型分配到对应数组）
-        /// 使用Cognex VisionPro的序列化工具加载.vpp文件，并存储到全局数组中
-        /// </summary>
-        /// <param name="tool">视觉工具配置DTO</param>
-        /// <param name="toolPath">工具文件路径（.vpp）</param>
-        /// <returns>元组（是否成功，错误信息）</returns>
-        private (bool Success, string ErrorMessage) LoadVisionTool(VisionToolDto tool, string toolPath)
-        {
-            try
-            {
-                // 加载.vpp文件（Cognex提供的序列化方法）
-                object toolObj = CogSerializer.LoadObjectFromFile(toolPath);
-                // 根据工具类型存储到对应数组（类型安全转换）
-                switch (tool.检测工具类型)
-                {
-                    case "CogAcqFifoTool":
-                        VisionSystem.AcqFifoTools[tool.检测工具索引] = toolObj as CogAcqFifoTool;
-                        break;
-                    case "CogToolBlockTool":
-                        VisionSystem.ToolBlocks[tool.检测工具索引] = toolObj as CogToolBlock;
-                        break;
-                    case "CogCalibNPointToNPointTool":
-                        VisionSystem.CalibNPointTools[tool.检测工具索引] = toolObj as CogCalibNPointToNPointTool;
-                        break;
-                    case "CogCalibCheckerboardTool":
-                        VisionSystem.CalibCheckerboardTools[tool.检测工具索引] = toolObj as CogCalibCheckerboardTool;
-                        break;
-                    default:
-                        return (false, $"不支持的视觉工具类型：{tool.检测工具类型}（名称：{tool.检测工具名称}）");
-                }
-                return (true, string.Empty);
-            }
-            catch (Exception ex)
-            {
-                return (false, $"工具加载失败（路径：{toolPath}）：{ex.Message}");
-            }
-        }
         #endregion
 
         #region Modbus通讯设备初始化
@@ -671,11 +586,11 @@ namespace JabilVisionMotion.Lib
         {
             try
             {
-                // 获取Modbus设备配置列表
-                var modbusDevices = ModbusSystem.Instance.ModbusCommunications;
-                // 检查配置列表是否为空
-                var emptyCheck = HardwareInitUtil.CheckEmptyList(modbusDevices, "Modbus设备");
-                if (!emptyCheck.Success) return emptyCheck;
+                // 获取Modbus设备配置列表（仅初始化"是否启用"的设备；开发/仿真环境无启用设备时跳过，不阻塞启动）
+                var modbusDevices = ModbusSystem.Instance.ModbusCommunications
+                    .Where(d => d.是否启用).ToList();
+                if (modbusDevices.Count == 0)
+                    return new IniInfo(true, "无启用的Modbus设备（跳过初始化）");
 
                 foreach (var device in modbusDevices)
                 {
@@ -713,11 +628,11 @@ namespace JabilVisionMotion.Lib
         {
             try
             {
-                // 获取Modbus设备配置列表
-                var modbusDevices = ModbusSystem.Instance.ModbusCommunications;
-                // 检查配置列表是否为空
-                var emptyCheck = HardwareInitUtil.CheckEmptyList(modbusDevices, "Modbus设备");
-                if (!emptyCheck.Success) return emptyCheck;
+                // 获取Modbus设备配置列表（仅初始化"是否启用"的设备；开发/仿真环境无启用设备时跳过，不阻塞启动）
+                var modbusDevices = ModbusSystem.Instance.ModbusCommunications
+                    .Where(d => d.是否启用).ToList();
+                if (modbusDevices.Count == 0)
+                    return new IniInfo(true, "无启用的Modbus设备（跳过初始化）");
 
                 foreach (var device in modbusDevices)
                 {

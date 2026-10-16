@@ -1,5 +1,4 @@
-﻿using Cognex.VisionPro;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -110,20 +109,6 @@ namespace Jabil.Module.Vision.Lib
         #endregion
 
         #region 图像数据
-        /// <summary>
-        /// Cognex VisionPro的图像接口对象
-        /// 存储原始的机器视觉图像数据，用于VisionPro工具链处理
-        /// 包含图像像素数据、尺寸信息、元数据等
-        /// </summary>
-        public ICogImage _CogImage;
-
-        /// <summary>
-        /// Cognex VisionPro的记录接口对象
-        /// 存储与图像相关的检测记录和分析结果
-        /// 可包含工具运行过程中的中间数据和最终结果
-        /// </summary>
-        public ICogRecord _Record;
-
         /// <summary>
         /// 转换后的JPG格式位图图像
         /// 用于显示和保存，通常是经过处理后的可视化图像

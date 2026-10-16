@@ -1,8 +1,4 @@
-﻿using Cognex.VisionPro;
-using Cognex.VisionPro.CalibFix;
-using Cognex.VisionPro.ImageFile;
-using Cognex.VisionPro.ToolBlock;
-using Jabil.Lib.Common;
+﻿using Jabil.Lib.Common;
 using Jabil.Lib;
 using Jabil.Lib.Parameter;
 using Jabil.Lib.SQLHelper;
@@ -106,43 +102,8 @@ namespace Jabil.Module.Vision
 
         #region 视觉工具实例管理
         /// <summary>
-        /// 图像采集工具数组
-        /// 索引对应不同相机，最大支持6个相机设备
-        /// CogAcqFifoTool用于从相机或图像采集卡获取图像数据
-        /// </summary>
-        public static CogAcqFifoTool[] AcqFifoTools { get; } = new CogAcqFifoTool[6];
-
-        /// <summary>
-        /// 检测工具块数组
-        /// 最大支持20个工具块，用于执行复杂视觉检测流程
-        /// CogToolBlock可包含多个视觉工具，按预设流程执行并返回结果
-        /// </summary>
-        public static CogToolBlock[] ToolBlocks { get; } = new CogToolBlock[20];
-
-        /// <summary>
-        /// N点标定工具数组
-        /// 最大支持20个标定工具，用于坐标转换标定
-        /// 通过已知的N对点坐标计算坐标转换关系，实现不同坐标系间的转换
-        /// </summary>
-        public static CogCalibNPointToNPointTool[] CalibNPointTools { get; } = new CogCalibNPointToNPointTool[20];
-
-        /// <summary>
-        /// 棋盘格标定工具数组
-        /// 最大支持20个标定工具，用于相机内参标定
-        /// 通过拍摄棋盘格图案计算相机的畸变参数、焦距等内参
-        /// </summary>
-        public static CogCalibCheckerboardTool[] CalibCheckerboardTools { get; } = new CogCalibCheckerboardTool[20];
-
-        /// <summary>
-        /// 本地图像文件工具
-        /// 用于加载和处理本地图像文件（如BMP、PNG、JPG等）
-        /// 主要用于离线测试和算法验证
-        /// </summary>
-        public static CogImageFileTool ImageFileTool { get; } = new CogImageFileTool();
-
-        /// <summary>
         /// 文件打开对话框
-        /// 用于选择图像文件或配置文件（如.vpp格式的视觉工具配置）
+        /// 用于选择图像文件或配置文件
         /// </summary>
         public static OpenFileDialog OpenFileDialog { get; } = new OpenFileDialog();
 
@@ -151,16 +112,6 @@ namespace Jabil.Module.Vision
         /// 用于保存处理后的图像或视觉工具配置
         /// </summary>
         public static SaveFileDialog SaveFileDialog { get; } = new SaveFileDialog();
-
-
-
-
-
-        ///<summary>
-        ///用于存放飞拍图片
-        ///</summary>
-        ///
-        public  List<ICogImage> List_飞拍图片 = new List<ICogImage>();
         #endregion
 
         #region 构造函数

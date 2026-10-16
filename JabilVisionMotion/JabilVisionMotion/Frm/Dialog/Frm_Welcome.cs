@@ -1,6 +1,4 @@
-﻿using Cognex.VisionPro.FGGigE;
-using Cognex.VisionPro.FGGigE.Implementation.Internal;
-using Jabil.Lib;
+﻿using Jabil.Lib;
 using Jabil.Module.Log.Frm;
 using Jabil.Module.Log.Lib;
 using Jabil.Module.Modbus;

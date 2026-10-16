@@ -39,6 +39,27 @@ namespace Jabil.Module.Setting.Lib.JVS
         /// <summary>相机实例（未打开时内部延迟打开）。</summary>
         public JvsCamera Camera { get; } = new JvsCamera();
 
+        /// <summary>
+        /// 最近一次 JVS 检测结果显示文本变更事件（OK/ERR + 点位 + 点数 + 数据）。
+        /// 由检测流程（VisionProcess）发布，设置页/主界面可订阅刷新显示。
+        /// </summary>
+        public static event Action<string> LastResultChanged;
+
+        /// <summary>
+        /// 发布最近一次检测结果显示文本（线程安全，空实现安全）。
+        /// </summary>
+        public static void NotifyLastResult(string resultText)
+        {
+            try
+            {
+                LastResultChanged?.Invoke(resultText ?? "");
+            }
+            catch (Exception)
+            {
+                // 订阅方异常不扩散到检测主流程
+            }
+        }
+
         /// <summary>Python 引擎是否已初始化。</summary>
         public bool IsEngineInitialized
         {
@@ -99,6 +120,7 @@ namespace Jabil.Module.Setting.Lib.JVS
                         .FromWorkspace(workspacePath)
                         .UseToolBlock(mapping.ToolBlock)
                         .WithInputPin(mapping.InputPin)
+                        .EnableRecords(true) // 开启可视化记录：主界面 6 宫格显示检测结果图需要（GetLastResultBitmap）
                         .Build();
                     _runners[toolName] = runner;
                     return runner;

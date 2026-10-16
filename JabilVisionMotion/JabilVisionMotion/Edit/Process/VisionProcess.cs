@@ -1,9 +1,4 @@
-﻿using Cognex.VisionPro;
-using Cognex.VisionPro.CalibFix;
-using Cognex.VisionPro.Display;
-using Cognex.VisionPro.ImageFile;
-using Cognex.VisionPro.ToolBlock;
-using Jabil.Lib;
+﻿using Jabil.Lib;
 using Jabil.Lib.Common;
 using Jabil.Module.Log.Lib;
 using Jabil.Module.Vision;
@@ -35,7 +30,7 @@ namespace JabilVisionMotion.Edit.Process
     /// - 控制相机完成图像采集（支持重试机制）
     /// - 执行视觉检测（如正反检测等）
     /// - 处理检测结果并更新UI展示
-    /// 依赖：Cognex视觉工具（如取像工具、检测工具、标定工具）
+    /// 依赖：JVS 视觉系统（相机工具算子取图 + 进程内 ToolBlock 检测）
     /// </summary>
     public class VisionProcess : ProcessBase, ICloneable
     {
@@ -60,14 +55,6 @@ namespace JabilVisionMotion.Edit.Process
         // 视觉参数
         private ImageInfo _imageInfo;           // 图像信息对象（存储采集参数、检测结果等）
         private VisionInspectionDto _visionInspection; // 视觉检测配置（从系统中查询的预设配置）
-
-        private CogImage8Grey Image8Grey = new CogImage8Grey();
-
-        // Cognex视觉工具（康耐视视觉库组件）
-        private CogAcqFifoTool _cogAcqFifo;    // 取像工具（控制相机采集图像）
-        private CogToolBlock _cogToolBlock;     // 检测工具块（执行具体视觉检测算法）
-        private CogCalibNPointToNPointTool _cogCalibNPointToNPoint; // N点标定工具（用于坐标转换）
-        private CogCalibCheckerboardTool _cogCalibCheckerboard; // 棋盘格标定工具（用于相机校准）
 
         // JVS 进程内嵌入（第二种方式：JvlDotNet）
         private JvsToolBlockRunner _jvsRunner;       // JVS 检测工具运行器（缓存于 JvsVisionBridge，装配一次）
@@ -116,10 +103,6 @@ namespace JabilVisionMotion.Edit.Process
                 _detectionName = this._detectionName,
                 _visionInspection = this._visionInspection,
                 _imageInfo = this._imageInfo,
-                _cogAcqFifo = this._cogAcqFifo,
-                _cogToolBlock = this._cogToolBlock,
-                _cogCalibNPointToNPoint = this._cogCalibNPointToNPoint,
-                _cogCalibCheckerboard = this._cogCalibCheckerboard,
                 Message = this.Message + "（已克隆实例）" // 克隆消息附加标识
             };
 
@@ -188,8 +171,6 @@ namespace JabilVisionMotion.Edit.Process
                 产品颜色定义 = _visionInspection.产品颜色定义,
                 取像工具曝光值 = _visionInspection.取像工具曝光值,
                 取像工具对比度值 = _visionInspection.取像工具对比度值,
-                _CogImage = null,
-                _Record = null,
                 JpgBitmap = null,
                 Result = "ERR",
                 RunState = false
@@ -223,26 +204,7 @@ namespace JabilVisionMotion.Edit.Process
                     }
                     else
                     {
-                        _cogAcqFifo = VisionSystem.AcqFifoTools[_imageInfo.绑定取像工具索引];
-                        Message += $", 取像工具索引={_imageInfo.绑定取像工具索引}";
-                    }
-                }
-
-                // 绑定标定工具（用于图像坐标到物理坐标的转换）
-                if (tool.检测工具名称 == _imageInfo.绑定标定工具名称)
-                {
-                    _imageInfo.绑定标定工具索引 = tool.检测工具索引;
-                    // 根据工具类型匹配具体的标定工具实例
-                    switch (tool.检测工具类型)
-                    {
-                        case "CogCalibNPointToNPointTool":
-                            _cogCalibNPointToNPoint = VisionSystem.CalibNPointTools[_imageInfo.绑定标定工具索引];
-                            Message += $", N点标定工具索引={_imageInfo.绑定标定工具索引}";
-                            break;
-                        case "CogCalibCheckerboardTool":
-                            _cogCalibCheckerboard = VisionSystem.CalibCheckerboardTools[_imageInfo.绑定标定工具索引];
-                            Message += $", 棋盘格标定工具索引={_imageInfo.绑定标定工具索引}";
-                            break;
+                        throw new InvalidOperationException($"不支持的取像工具类型：{tool.检测工具类型}（仅支持 JvsCameraTool）");
                     }
                 }
 
@@ -263,20 +225,19 @@ namespace JabilVisionMotion.Edit.Process
                     }
                     else
                     {
-                        _cogToolBlock = VisionSystem.ToolBlocks[_imageInfo.绑定检测工具索引];
-                        Message += $", 检测工具索引={_imageInfo.绑定检测工具索引}";
+                        throw new InvalidOperationException($"不支持的检测工具类型：{tool.检测工具类型}（仅支持 JvsWorkspaceTool）");
                     }
                 }
             }
 
             // 验证关键工具是否绑定成功（取像和检测工具为必需）
-            if (!_jvsTakeToolBound && _cogAcqFifo == null)
-                throw new InvalidOperationException($"未找到取像工具: {_imageInfo.绑定取像工具名称}");
+            if (!_jvsTakeToolBound)
+                throw new InvalidOperationException($"未找到取像工具: {_imageInfo.绑定取像工具名称}（未配置 JvsCameraTool）");
 
-            if (_jvsRunner == null && _cogToolBlock == null)
-                throw new InvalidOperationException($"未找到检测工具: {_imageInfo.绑定检测工具名称}");
+            if (_jvsRunner == null)
+                throw new InvalidOperationException($"未找到检测工具: {_imageInfo.绑定检测工具名称}（未配置 JvsWorkspaceTool）");
 
-            Message = $"[{DateTime.Now:HH:mm:ss}] 视觉工具绑定完成：所有必需工具已就绪（JVS 模式={( _jvsRunner != null)}）";
+            Message = $"[{DateTime.Now:HH:mm:ss}] 视觉工具绑定完成：所有必需工具已就绪（JVS 模式）";
         }
 
         /// <summary>
@@ -374,15 +335,11 @@ namespace JabilVisionMotion.Edit.Process
                     {
                         case "Epson2左上定位":
                             Message = $"[{DateTime.Now:HH:mm:ss}] 准备处理左上定位：使用左上定位相机";
-                            ProcessCameraCapture("左上定位",
-                                MainPage.Instance.cogRecordDisplay2,
-                                (display, record) => UpdateDisplay(display, record));
+                            ProcessCameraCapture("左上定位");
                             break;
                         case "Epson1左上定位":
                             Message = $"[{DateTime.Now:HH:mm:ss}] 准备处理左上定位：使用左上定位相机";
-                            ProcessCameraCapture("左上定位",
-                                MainPage.Instance.cogRecordDisplay2,
-                                (display, record) => UpdateDisplay(display, record));
+                            ProcessCameraCapture("左上定位");
                             break;
                         default:
                             SetErrorStatus($"不支持的检测点位名称: {_detectionName}（扫码相机支持的对象：扫码检测1、扫码检测2）");
@@ -395,15 +352,11 @@ namespace JabilVisionMotion.Edit.Process
                     {
                         case "Epson2右上定位":
                             Message = $"[{DateTime.Now:HH:mm:ss}] 准备处理左上定位：使用左上定位相机";
-                            ProcessCameraCapture("右上定位",
-                                MainPage.Instance.cogRecordDisplay4,
-                                (display, record) => UpdateDisplay(display, record));
+                            ProcessCameraCapture("右上定位");
                             break;
                         case "Epson1右上定位":
                             Message = $"[{DateTime.Now:HH:mm:ss}] 准备处理左上定位：使用左上定位相机";
-                            ProcessCameraCapture("右上定位",
-                                MainPage.Instance.cogRecordDisplay4,
-                                (display, record) => UpdateDisplay(display, record));
+                            ProcessCameraCapture("右上定位");
                             break;
                         default:
                             SetErrorStatus($"不支持的检测点位名称: {_detectionName}（扫码相机支持的对象：扫码检测1、扫码检测2）");
@@ -415,9 +368,7 @@ namespace JabilVisionMotion.Edit.Process
                     {
                         case "左下定位":
                             Message = $"[{DateTime.Now:HH:mm:ss}] 准备处理左下定位：使用左下定位相机";
-                            ProcessCameraCapture("左下定位",
-                                MainPage.Instance.cogRecordDisplay3,
-                                (display, record) => UpdateDisplay(display, record));
+                            ProcessCameraCapture("左下定位");
                             break;
                         default:
                             SetErrorStatus($"不支持的检测点位名称: {_detectionName}（扫码相机支持的对象：扫码检测1、扫码检测2）");
@@ -429,9 +380,7 @@ namespace JabilVisionMotion.Edit.Process
                     {
                         case "右下定位":
                             Message = $"[{DateTime.Now:HH:mm:ss}] 准备处理左下定位：使用左下定位相机";
-                            ProcessCameraCapture("右下定位",
-                                MainPage.Instance.cogRecordDisplay5,
-                                (display, record) => UpdateDisplay(display, record));
+                            ProcessCameraCapture("右下定位");
                             break;
                         default:
                             SetErrorStatus($"不支持的检测点位名称: {_detectionName}（扫码相机支持的对象：扫码检测1、扫码检测2）");
@@ -443,15 +392,11 @@ namespace JabilVisionMotion.Edit.Process
                     {
                         case "飞拍定位":
                             Message = $"[{DateTime.Now:HH:mm:ss}] 准备处理飞拍定位：使用飞拍相机";
-                            ProcessCameraCapture("飞拍定位",
-                                MainPage.Instance.cogRecordDisplay1,
-                                (display, record) => UpdateDisplay(display, record));
+                            ProcessCameraCapture("飞拍定位");
                             break;
                         case "飞拍复检":
                             Message = $"[{DateTime.Now:HH:mm:ss}] 准备处理飞拍定位：使用飞拍相机";
-                            ProcessCameraCapture("飞拍复检",
-                                MainPage.Instance.cogRecordDisplay1,
-                                (display, record) => UpdateDisplay(display, record));
+                            ProcessCameraCapture("飞拍复检");
                             break;
                         default:
                             SetErrorStatus($"不支持的检测点位名称: {_detectionName}（扫码相机支持的对象：扫码检测1、扫码检测2）");
@@ -470,94 +415,26 @@ namespace JabilVisionMotion.Edit.Process
         /// 包含参数配置、图像采集、检测执行和结果显示
         /// </summary>
         /// <param name="cameraType">相机类型（如下相机左）</param>
-        /// <param name="displayAccessor">显示控件访问器（用于获取UI显示控件）</param>
-        /// <param name="displayUpdater">显示更新器（用于更新UI显示内容）</param>
-        private void ProcessCameraCapture(string cameraType,
-                                         CogRecordDisplay displayAccessor,
-                                         Action<object, object> displayUpdater)
+        private void ProcessCameraCapture(string cameraType)
         {
             Message = $"[{DateTime.Now:HH:mm:ss}] 开始相机采集流程：相机类型={cameraType}，对象={_detectionName}";
 
-            // ===== JVS 模式（进程内嵌入）：相机由 JVS 相机 API 取像，检测在进程内 ToolBlock 执行 =====
-            if (_jvsRunner != null)
+            // ===== JVS 模式（进程内嵌入，唯一取图/检测通道）=====
+            // 相机由 JVS workspace 相机工具算子（CameraTool/.jvt）取像，检测在进程内 ToolBlock 执行
+            // 不再使用 Cognex 取像/检测/标定工具（VisionPro 已彻底移除）
+            if (_jvsRunner == null)
             {
-                if (!CaptureWithJvsCamera())
-                    return;
-
-                if (!ProcessJvsImageDetection(cameraType, _detectionName))
-                    return;
-
-                // 更新UI显示检测结果（JVS 模式显示最近一次 JVS 检测结果文本）
-                UpdateVisionDisplay(displayAccessor, displayUpdater);
-                Message = $"[{DateTime.Now:HH:mm:ss}] UI显示更新完成：相机类型={cameraType}，JVS 检测完成";
+                SetErrorStatus("视觉检测未就绪：未装配 JVS 检测工具（JvsWorkspaceTool）");
                 return;
             }
 
-            if (cameraType == "左上定位" || cameraType == "左下定位"|| cameraType == "右上定位" || cameraType == "右下定位")
-            {
-                // 配置相机参数（曝光、对比度）并采集图像（带重试）
-                ConfigureAndCaptureImage();
-
-                // 验证图像采集结果
-                if (_cogAcqFifo.RunStatus.Result != CogToolResultConstants.Accept ||
-                    _cogAcqFifo.OutputImage == null)
-                {
-                    SetErrorStatus($"取像工具 {_imageInfo.绑定取像工具名称} 取图失败（重试{MaxCaptureRetries}次后仍无有效图像）");
-                    return;
-                }
-                else
-                {
-                    Image8Grey = _cogAcqFifo.OutputImage as CogImage8Grey;
-                    Message = $"[{DateTime.Now:HH:mm:ss}] 图像采集成功：取像工具={_imageInfo.绑定取像工具名称}，图像类型={Image8Grey?.GetType().Name}";
-                }
-            }
-            else
-            {
-                Image8Grey = Controller.Instance.StationInfo.image8Greys;
-                Message = $"[{DateTime.Now:HH:mm:ss}] 使用预存图像：相机类型={cameraType}，图像来源=StationInfo";
-            }
-
-            // 执行图像检测
-            if (!ProcessImageDetection(cameraType, _detectionName))
+            if (!CaptureWithJvsCamera())
                 return;
 
-            // 更新UI显示检测结果
-            UpdateVisionDisplay(displayAccessor, displayUpdater);
-            UpdateVisionDisplay(MainPage.Instance.cogRecordDisplay_结果图保存, displayUpdater);
-            Message = $"[{DateTime.Now:HH:mm:ss}] UI显示更新完成：相机类型={cameraType}，显示控件={displayAccessor?.GetType().Name}";
-        }
+            if (!ProcessJvsImageDetection(cameraType, _detectionName))
+                return;
 
-
-        /// <summary>
-        /// 配置相机参数并采集图像（带重试机制）
-        /// 确保图像采集的可靠性
-        /// </summary>
-        private void ConfigureAndCaptureImage()
-        {
-            // 设置相机采集参数（曝光值和对比度，从配置中获取）
-            _cogAcqFifo.Operator.OwnedExposureParams.Exposure = _imageInfo.取像工具曝光值;
-            _cogAcqFifo.Operator.OwnedContrastParams.Contrast = _imageInfo.取像工具对比度值;
-            Message = $"[{DateTime.Now:HH:mm:ss}] 相机参数配置完成：曝光值={_imageInfo.取像工具曝光值}，对比度={_imageInfo.取像工具对比度值}";
-
-            // 采集图像（带重试逻辑，最多重试MaxCaptureRetries次）
-            bool captureSuccess = false;
-            for (int i = 0; i < MaxCaptureRetries; i++)
-            {
-                _cogAcqFifo.Run();
-                if (_cogAcqFifo.OutputImage != null)
-                {
-                    captureSuccess = true;
-                    Message = $"[{DateTime.Now:HH:mm:ss}] 第{i + 1}次采集成功：取像工具={_imageInfo.绑定取像工具名称}";
-                    break;
-                }
-                Message = $"[{DateTime.Now:HH:mm:ss}] 第{i + 1}次采集失败：取像工具无输出图像，将在{CaptureRetryIntervalMs}ms后重试";
-                Thread.Sleep(CaptureRetryIntervalMs); // 重试间隔
-            }
-
-            if (!captureSuccess)
-            {
-                Message = $"[{DateTime.Now:HH:mm:ss}] 所有重试均失败：取像工具={_imageInfo.绑定取像工具名称}，重试次数={MaxCaptureRetries}";
-            }
+            Message = $"[{DateTime.Now:HH:mm:ss}] JVS 检测完成：相机类型={cameraType}，检测点位={_detectionName}（结果已写入 StationInfo/数据页）";
         }
 
         /// <summary>
@@ -677,6 +554,7 @@ namespace JabilVisionMotion.Edit.Process
             {
                 SetErrorStatus($"JVS 检测失败：{run.Error}");
                 Controller.Instance.StationInfo.JvsLastResultDisplay = $"ERR | 点位={detectionName} | JVS 检测失败：{run.Error}";
+                JvsVisionBridge.NotifyLastResult(Controller.Instance.StationInfo.JvsLastResultDisplay);
                 MainPage.Instance?.AddVisionDataRow("ERR", detectionName, 0, elapsedMs, elapsedMs, (int)run.TotalMs, (int)run.ProcessingMs, run.Error);
                 return false;
             }
@@ -684,6 +562,7 @@ namespace JabilVisionMotion.Edit.Process
             {
                 SetErrorStatus($"JVS 检测未返回有效检测点（输出 pin={mapping.OutputPin} 为空或格式不符；已自动重试一次）");
                 Controller.Instance.StationInfo.JvsLastResultDisplay = $"ERR | 点位={detectionName} | 未返回有效检测点（重试后仍为空）";
+                JvsVisionBridge.NotifyLastResult(Controller.Instance.StationInfo.JvsLastResultDisplay);
                 MainPage.Instance?.AddVisionDataRow("ERR", detectionName, 0, elapsedMs, elapsedMs, (int)run.TotalMs, (int)run.ProcessingMs, "未返回有效检测点（重试后仍为空）");
                 return false;
             }
@@ -697,12 +576,33 @@ namespace JabilVisionMotion.Edit.Process
                 $"{_imageInfo.Result} | 点位={detectionName} | 点数={run.Points.Count} | " +
                 string.Join(";", run.Points.Select(p => $"{p.X:F3},{p.Y:F3},{p.R:F3}"));
             Controller.Instance.StationInfo.JvsLastResultDisplay = jvsDisplay;
+            JvsVisionBridge.NotifyLastResult(jvsDisplay); // 设置页/主界面状态面板刷新
             // 同步写入主界面数据页视觉数据表（耗时对比）
             MainPage.Instance?.AddVisionDataRow(
                 _imageInfo.Result, detectionName, run.Points.Count,
                 elapsedMs, elapsedMs, (int)run.TotalMs, (int)run.ProcessingMs,
                 string.Join(";", run.Points.Select(p => $"{p.X:F3},{p.Y:F3},{p.R:F3}")));
             Message += $"，UI显示={Controller.Instance.StationInfo.JvsLastResultDisplay}";
+
+            // ===== JVS 检测结果图推送主界面 6 宫格显示（非阻塞；显示失败不影响检测）=====
+            // 取最近一次记录的带标注结果图（image_with_shapes）→ MainPage 对应相机格自动刷新
+            try
+            {
+                var resultBitmap = _jvsRunner.GetLastResultBitmap();
+                if (resultBitmap != null)
+                {
+                    string displayKey = string.IsNullOrWhiteSpace(_imageInfo.绑定取像工具名称)
+                        ? detectionName
+                        : _imageInfo.绑定取像工具名称;
+                    MainPage.Instance?.RefreshJvsDisplay(displayKey, resultBitmap);
+                }
+                // 清理可视化记录（Bitmap 已独立拷贝），防止中间图像堆积导致内存增长
+                _jvsRunner.ClearRecords();
+            }
+            catch (Exception displayEx)
+            {
+                RLog.SaveError(displayEx);
+            }
 
             // 结果写入 StationInfo（按检测点位名称）
             return ApplyJvsResult(detectionName, run.Points);
@@ -871,638 +771,7 @@ namespace JabilVisionMotion.Edit.Process
         };
         #endregion
 
-        /// <summary>
-        /// 执行图像检测处理（核心检测逻辑）
-        /// 将采集的图像输入检测工具，执行算法并判断结果
-        /// </summary>
-        /// <param name="cameraType">相机类型（用于验证检测类型匹配）</param>
-        /// <returns>是否检测成功</returns>
-        private bool ProcessImageDetection(string cameraType, string detectionName)
-        {
-            Message = $"[{DateTime.Now:HH:mm:ss}] 开始图像检测：相机类型={cameraType}，检测对象={detectionName}";
 
-            if (cameraType == "左上定位" || cameraType == "左下定位" || cameraType == "右上定位" || cameraType == "右下定位")
-            {
-                // 将采集的图像输入检测工具块
-                _cogToolBlock.Inputs["InputImage"].Value = Image8Grey;
-
-                if (_cogToolBlock.Inputs["InputImage"].Value == null)
-                {
-                    SetErrorStatus("检测工具输入图像为空（可能采集失败或图像转换错误）");
-                    return false;
-                }
-
-                // 执行检测算法
-                _imageInfo._CogImage = Image8Grey; // 保存原始图像
-                _cogToolBlock.Run(); // 运行检测工具块
-                Message = $"[{DateTime.Now:HH:mm:ss}] 检测工具执行完成：工具状态={_cogToolBlock.RunStatus.Result}";
-
-                // 更新检测状态（根据工具返回结果判断是否成功）
-                _imageInfo.RunState = _cogToolBlock.RunStatus.Result == CogToolResultConstants.Accept;
-                _imageInfo.RunState = true;
-
-
-                CoordinateData 下相机标准位 = new CoordinateData();
-
-                CoordinateData 下相机拍照数据 = new CoordinateData();
-
-                CoordinateData 固定补偿 = new CoordinateData();
-
-                CoordinateData 旋转中心 = new CoordinateData();
-
-                CoordinateData CalculateResult = new CoordinateData();
-
-
-                switch (detectionName)
-                {
-                    case "Epson2左上定位":
-                        string result = _cogToolBlock.Outputs["Results"].Value.ToString();
-                        Controller.Instance.StationInfo.左上相机Mean=Convert.ToDouble(_cogToolBlock.Outputs["Mean"].Value);
-
-                        if (result != null)
-                        {
-                            string[] lines = result.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                            for (int i = 0; i < lines.Length; i++)
-                            {
-                                string[] parts = lines[i].Split(',');
-                                Controller.Instance.StationInfo.Epson2X.Enqueue(Math.Round(double.Parse(parts[0], CultureInfo.InvariantCulture), 3));
-                                Controller.Instance.StationInfo.Epson2Y.Enqueue(Math.Round(double.Parse(parts[1], CultureInfo.InvariantCulture), 3));
-                                Controller.Instance.StationInfo.Epson2R.Enqueue(Math.Round(double.Parse(parts[2], CultureInfo.InvariantCulture), 3));
-                            }
-                        }
-                        break;
-                    case "Epson2右上定位":
-                        string result_R = _cogToolBlock.Outputs["Results"].Value.ToString();
-                        Controller.Instance.StationInfo.右上相机Mean = Convert.ToDouble(_cogToolBlock.Outputs["Mean"].Value);
-
-                        if (result_R != null)
-                        {
-                            string[] lines = result_R.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                            for (int i = 0; i < lines.Length; i++)
-                            {
-                                string[] parts = lines[i].Split(',');
-                                Controller.Instance.StationInfo.Epson2X.Enqueue(Math.Round(double.Parse(parts[0], CultureInfo.InvariantCulture), 3));
-                                Controller.Instance.StationInfo.Epson2Y.Enqueue(Math.Round(double.Parse(parts[1], CultureInfo.InvariantCulture), 3));
-                                Controller.Instance.StationInfo.Epson2R.Enqueue(Math.Round(double.Parse(parts[2], CultureInfo.InvariantCulture), 3));
-                            }
-                        }
-                        break;
-
-                    case "Epson1左上定位":
-                        string result1 = _cogToolBlock.Outputs["Results"].Value.ToString();
-                        Controller.Instance.StationInfo.左上相机Mean = Convert.ToDouble(_cogToolBlock.Outputs["Mean"].Value);
-                        if (result1 != null)
-                        {
-                            string[] lines = result1.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                            for (int i = 0; i < lines.Length; i++)
-                            {
-                                string[] parts = lines[i].Split(',');
-                                Controller.Instance.StationInfo.Epson1X.Enqueue(Math.Round(double.Parse(parts[0], CultureInfo.InvariantCulture), 3));
-                                Controller.Instance.StationInfo.Epson1Y.Enqueue(Math.Round(double.Parse(parts[1], CultureInfo.InvariantCulture), 3));
-                                Controller.Instance.StationInfo.Epson1R.Enqueue(Math.Round(double.Parse(parts[2], CultureInfo.InvariantCulture), 3));
-                            }
-                        }
-                        break;
-                    case "Epson1右上定位":
-                        string result2 = _cogToolBlock.Outputs["Results"].Value.ToString();
-                        Controller.Instance.StationInfo.右上相机Mean = Convert.ToDouble(_cogToolBlock.Outputs["Mean"].Value);
-                        if (result2 != null)
-                        {
-                            string[] lines = result2.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                            for (int i = 0; i < lines.Length; i++)
-                            {
-                                string[] parts = lines[i].Split(',');
-                                Controller.Instance.StationInfo.Epson1X.Enqueue(Math.Round(double.Parse(parts[0], CultureInfo.InvariantCulture), 3));
-                                Controller.Instance.StationInfo.Epson1Y.Enqueue(Math.Round(double.Parse(parts[1], CultureInfo.InvariantCulture), 3));
-                                Controller.Instance.StationInfo.Epson1R.Enqueue(Math.Round(double.Parse(parts[2], CultureInfo.InvariantCulture), 3));
-                            }
-                        }
-                        break;
-
-
-                    case "左下定位":
-                        if (Controller.Instance.StationInfo.Epson2下相机请求位置号 == 1)
-                        {
-                            下相机标准位.X = Project.Instance.postion左Epson.X1;
-                            下相机标准位.Y = Project.Instance.postion左Epson.Y1;
-                            下相机标准位.Rotation = Project.Instance.postion左Epson.R1;
-
-
-                            下相机拍照数据.X = Convert.ToDouble(_cogToolBlock.Outputs["X"].Value); ;
-                            下相机拍照数据.Y = Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value);
-                            下相机拍照数据.Rotation = Convert.ToDouble(_cogToolBlock.Outputs["R"].Value);
-
-
-                            固定补偿.X = Project.Instance.postion左Epson.X21;
-                            固定补偿.Y = Project.Instance.postion左Epson.Y21;
-                            固定补偿.Rotation = Project.Instance.postion左Epson.R21;
-
-
-                            旋转中心.X = Project.Instance.postion左Epson.X11;
-                            旋转中心.Y = Project.Instance.postion左Epson.Y11;
-
-
-                            CalculateResult= Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX左[0] = CalculateResult.X*(-1);
-                            Controller.Instance.StationInfo.downCamY左[0] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR左[0] = CalculateResult.Rotation * (-1);
-
-
-                        }
-                        else if (Controller.Instance.StationInfo.Epson2下相机请求位置号 == 2)
-                        {
-
-                            下相机标准位.X = Project.Instance.postion左Epson.X2;
-                            下相机标准位.Y = Project.Instance.postion左Epson.Y2;
-                            下相机标准位.Rotation = Project.Instance.postion左Epson.R2;
-
-
-                            下相机拍照数据.X = Convert.ToDouble(_cogToolBlock.Outputs["X"].Value); ;
-                            下相机拍照数据.Y = Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value);
-                            下相机拍照数据.Rotation = Convert.ToDouble(_cogToolBlock.Outputs["R"].Value);
-
-
-                            固定补偿.X = Project.Instance.postion左Epson.X22;
-                            固定补偿.Y = Project.Instance.postion左Epson.Y22;
-                            固定补偿.Rotation = Project.Instance.postion左Epson.R22;
-
-
-                            旋转中心.X = Project.Instance.postion左Epson.X12;
-                            旋转中心.Y = Project.Instance.postion左Epson.Y12;
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX左[1] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY左[1] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR左[1] = CalculateResult.Rotation * (-1);
-
-                        }
-                        else if (Controller.Instance.StationInfo.Epson2下相机请求位置号 == 3)
-                        {
-                            下相机标准位.X = Project.Instance.postion左Epson.X3;
-                            下相机标准位.Y = Project.Instance.postion左Epson.Y3;
-                            下相机标准位.Rotation = Project.Instance.postion左Epson.R3;
-
-
-                            下相机拍照数据.X = Convert.ToDouble(_cogToolBlock.Outputs["X"].Value); ;
-                            下相机拍照数据.Y = Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value);
-                            下相机拍照数据.Rotation = Convert.ToDouble(_cogToolBlock.Outputs["R"].Value);
-
-
-                            固定补偿.X = Project.Instance.postion左Epson.X23;
-                            固定补偿.Y = Project.Instance.postion左Epson.Y23;
-                            固定补偿.Rotation = Project.Instance.postion左Epson.R23;
-
-
-                            旋转中心.X = Project.Instance.postion左Epson.X13;
-                            旋转中心.Y = Project.Instance.postion左Epson.Y13;
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX左[2] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY左[2] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR左[2] = CalculateResult.Rotation * (-1);
-
-                        }
-                        else if (Controller.Instance.StationInfo.Epson2下相机请求位置号 == 4)
-                        {
-                            下相机标准位.X = Project.Instance.postion左Epson.X4;
-                            下相机标准位.Y = Project.Instance.postion左Epson.Y4;
-                            下相机标准位.Rotation = Project.Instance.postion左Epson.R4;
-
-
-                            下相机拍照数据.X = Convert.ToDouble(_cogToolBlock.Outputs["X"].Value); ;
-                            下相机拍照数据.Y = Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value);
-                            下相机拍照数据.Rotation = Convert.ToDouble(_cogToolBlock.Outputs["R"].Value);
-
-
-                            固定补偿.X = Project.Instance.postion左Epson.X24;
-                            固定补偿.Y = Project.Instance.postion左Epson.Y24;
-                            固定补偿.Rotation = Project.Instance.postion左Epson.R24;
-
-
-                            旋转中心.X = Project.Instance.postion左Epson.X14;
-                            旋转中心.Y = Project.Instance.postion左Epson.Y14;
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX左[3] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY左[3] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR左[3] = CalculateResult.Rotation * (-1);
-                        }
-                        else if (Controller.Instance.StationInfo.Epson2下相机请求位置号 == 5)
-                        {
-                            下相机标准位.X = Project.Instance.postion左Epson.X5;
-                            下相机标准位.Y = Project.Instance.postion左Epson.Y5;
-                            下相机标准位.Rotation = Project.Instance.postion左Epson.R5;
-
-
-                            下相机拍照数据.X = Convert.ToDouble(_cogToolBlock.Outputs["X"].Value); ;
-                            下相机拍照数据.Y = Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value);
-                            下相机拍照数据.Rotation = Convert.ToDouble(_cogToolBlock.Outputs["R"].Value);
-
-
-                            固定补偿.X = Project.Instance.postion左Epson.X25;
-                            固定补偿.Y = Project.Instance.postion左Epson.Y25;
-                            固定补偿.Rotation = Project.Instance.postion左Epson.R25;
-
-
-                            旋转中心.X = Project.Instance.postion左Epson.X15;
-                            旋转中心.Y = Project.Instance.postion左Epson.Y15;
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX左[4] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY左[4] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR左[4] = CalculateResult.Rotation * (-1);
-
-
-
-
-                        }
-                        else if (Controller.Instance.StationInfo.Epson2下相机请求位置号 == 6)
-                        {
-                            下相机标准位.X = Project.Instance.postion左Epson.X6;
-                            下相机标准位.Y = Project.Instance.postion左Epson.Y6;
-                            下相机标准位.Rotation = Project.Instance.postion左Epson.R6;
-
-
-                            下相机拍照数据.X = Convert.ToDouble(_cogToolBlock.Outputs["X"].Value); ;
-                            下相机拍照数据.Y = Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value);
-                            下相机拍照数据.Rotation = Convert.ToDouble(_cogToolBlock.Outputs["R"].Value);
-
-
-                            固定补偿.X = Project.Instance.postion左Epson.X26;
-                            固定补偿.Y = Project.Instance.postion左Epson.Y26;
-                            固定补偿.Rotation = Project.Instance.postion左Epson.R26;
-
-
-                            旋转中心.X = Project.Instance.postion左Epson.X16;
-                            旋转中心.Y = Project.Instance.postion左Epson.Y16;
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX左[5] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY左[5] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR左[5] = CalculateResult.Rotation * (-1);
-                        }
-                        Controller.Instance.StationInfo.Epson2下相机拍照结果 = 1;
-                        Controller.Instance.StationInfo.Epson2下相机请求位置号 = 0;
-                        break;
-
-
-                    case "右下定位":
-                        Controller.Instance.StationInfo.Epson1下相机拍照结果 = 1;
-                        if (Controller.Instance.StationInfo.Epson1下相机请求位置号 == 1)
-                        {
-                            下相机标准位.X = Project.Instance.postion右Epson.X1;
-                            下相机标准位.Y = Project.Instance.postion右Epson.Y1;
-                            下相机标准位.Rotation = Project.Instance.postion右Epson.R1;
-
-
-                            下相机拍照数据.X =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["X"].Value),3);
-                            下相机拍照数据.Y =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value),3);
-                            下相机拍照数据.Rotation =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["R"].Value),3);
-
-
-
-                            if (Math.Abs(下相机标准位.Rotation- 下相机拍照数据.Rotation)>5)
-                            {
-                                Controller.Instance.StationInfo.Epson1下相机拍照结果 = 2;
-                            }
-
-                            固定补偿.X = Project.Instance.postion右Epson.X21;
-                            固定补偿.Y = Project.Instance.postion右Epson.Y21;
-                            固定补偿.Rotation = Project.Instance.postion右Epson.R21;
-
-
-                            旋转中心.X = Project.Instance.postion右Epson.X11;
-                            旋转中心.Y = Project.Instance.postion右Epson.Y11;
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX右[0] = CalculateResult.X*(-1);
-                            Controller.Instance.StationInfo.downCamY右[0] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR右[0] = CalculateResult.Rotation * (-1);
-
-
-
-                        }
-                        else if (Controller.Instance.StationInfo.Epson1下相机请求位置号 == 2)
-                        {
-
-                            下相机标准位.X = Project.Instance.postion右Epson.X2;
-                            下相机标准位.Y = Project.Instance.postion右Epson.Y2;
-                            下相机标准位.Rotation = Project.Instance.postion右Epson.R2;
-
-
-                            下相机拍照数据.X =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["X"].Value),3);
-                            下相机拍照数据.Y = Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value), 3);
-                            下相机拍照数据.Rotation =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["R"].Value),3);
-
-
-                            固定补偿.X = Project.Instance.postion右Epson.X22;
-                            固定补偿.Y = Project.Instance.postion右Epson.Y22;
-                            固定补偿.Rotation = Project.Instance.postion右Epson.R22;
-
-                            if (Math.Abs(下相机标准位.Rotation - 下相机拍照数据.Rotation) > 5)
-                            {
-                                Controller.Instance.StationInfo.Epson1下相机拍照结果 = 2;
-                            }
-
-
-
-                            旋转中心.X = Project.Instance.postion右Epson.X12;
-                            旋转中心.Y = Project.Instance.postion右Epson.Y12;
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX右[1] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY右[1] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR右[1] = CalculateResult.Rotation * (-1);
-
-                        }
-                        else if (Controller.Instance.StationInfo.Epson1下相机请求位置号 == 3)
-                        {
-                            下相机标准位.X = Project.Instance.postion右Epson.X3;
-                            下相机标准位.Y = Project.Instance.postion右Epson.Y3;
-                            下相机标准位.Rotation = Project.Instance.postion右Epson.R3;
-
-
-                            下相机拍照数据.X =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["X"].Value),3) ;
-                            下相机拍照数据.Y =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value),3);
-                            下相机拍照数据.Rotation =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["R"].Value));
-
-
-                            固定补偿.X = Project.Instance.postion右Epson.X23;
-                            固定补偿.Y = Project.Instance.postion右Epson.Y23;
-                            固定补偿.Rotation = Project.Instance.postion右Epson.R23;
-
-
-                            旋转中心.X = Project.Instance.postion右Epson.X13;
-                            旋转中心.Y = Project.Instance.postion右Epson.Y13;
-
-                            if (Math.Abs(下相机标准位.Rotation - 下相机拍照数据.Rotation) > 5)
-                            {
-                                Controller.Instance.StationInfo.Epson1下相机拍照结果 = 2;
-                            }
-
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX右[2] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY右[2] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR右[2] = CalculateResult.Rotation * (-1);
-                        }
-                        else if (Controller.Instance.StationInfo.Epson1下相机请求位置号 == 4)
-                        {
-                            下相机标准位.X = Project.Instance.postion右Epson.X4;
-                            下相机标准位.Y = Project.Instance.postion右Epson.Y4;
-                            下相机标准位.Rotation = Project.Instance.postion右Epson.R4;
-
-
-                            下相机拍照数据.X = Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["X"].Value), 3);
-                            下相机拍照数据.Y =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value),3);
-                            下相机拍照数据.Rotation =Math.Round( Convert.ToDouble(_cogToolBlock.Outputs["R"].Value),3);
-
-
-                            固定补偿.X = Project.Instance.postion右Epson.X24;
-                            固定补偿.Y = Project.Instance.postion右Epson.Y24;
-                            固定补偿.Rotation = Project.Instance.postion右Epson.R24;
-
-
-                            旋转中心.X = Project.Instance.postion右Epson.X14;
-                            旋转中心.Y = Project.Instance.postion右Epson.Y14;
-
-
-                            if (Math.Abs(下相机标准位.Rotation - 下相机拍照数据.Rotation) > 5)
-                            {
-                                Controller.Instance.StationInfo.Epson1下相机拍照结果 = 2;
-                            }
-
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX右[3] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY右[3] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR右[3] = CalculateResult.Rotation * (-1);
-
-                        }
-                        else if (Controller.Instance.StationInfo.Epson1下相机请求位置号 == 5)
-                        {
-                            下相机标准位.X = Project.Instance.postion右Epson.X5;
-                            下相机标准位.Y = Project.Instance.postion右Epson.Y5;
-                            下相机标准位.Rotation = Project.Instance.postion右Epson.R5;
-
-
-                            下相机拍照数据.X =Math.Round( Convert.ToDouble(_cogToolBlock.Outputs["X"].Value),3) ;
-                            下相机拍照数据.Y =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value),3);
-                            下相机拍照数据.Rotation =Math.Round( Convert.ToDouble(_cogToolBlock.Outputs["R"].Value),3);
-
-
-                            固定补偿.X = Project.Instance.postion右Epson.X25;
-                            固定补偿.Y = Project.Instance.postion右Epson.Y25;
-                            固定补偿.Rotation = Project.Instance.postion右Epson.R25;
-
-
-                            旋转中心.X = Project.Instance.postion右Epson.X15;
-                            旋转中心.Y = Project.Instance.postion右Epson.Y15;
-
-
-                            if (Math.Abs(下相机标准位.Rotation - 下相机拍照数据.Rotation) > 5)
-                            {
-                                Controller.Instance.StationInfo.Epson1下相机拍照结果 = 2;
-                            }
-
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX右[4] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY右[4] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR右[4] = CalculateResult.Rotation * (-1);
-
-                        }
-                        else if (Controller.Instance.StationInfo.Epson1下相机请求位置号 == 6)
-                        {
-                            下相机标准位.X = Project.Instance.postion右Epson.X6;
-                            下相机标准位.Y = Project.Instance.postion右Epson.Y6;
-                            下相机标准位.Rotation = Project.Instance.postion右Epson.R6;
-
-
-                            下相机拍照数据.X =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["X"].Value),3) ;
-                            下相机拍照数据.Y =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value),3);
-                            下相机拍照数据.Rotation =Math.Round(Convert.ToDouble(_cogToolBlock.Outputs["R"].Value),3);
-
-
-                            固定补偿.X = Project.Instance.postion右Epson.X26;
-                            固定补偿.Y = Project.Instance.postion右Epson.Y26;
-                            固定补偿.Rotation = Project.Instance.postion右Epson.R26;
-
-
-                            旋转中心.X = Project.Instance.postion右Epson.X16;
-                            旋转中心.Y = Project.Instance.postion右Epson.Y16;
-
-                            if (Math.Abs(下相机标准位.Rotation - 下相机拍照数据.Rotation) > 5)
-                            {
-                                Controller.Instance.StationInfo.Epson1下相机拍照结果 = 2;
-                            }
-
-
-
-                            CalculateResult = Controller.Instance.StationInfo.Calculate(下相机标准位, 下相机拍照数据, 固定补偿, 旋转中心);
-
-                            Controller.Instance.StationInfo.downCamX右[5] = CalculateResult.X * (-1);
-                            Controller.Instance.StationInfo.downCamY右[5] = CalculateResult.Y * (-1);
-                            Controller.Instance.StationInfo.downCamR右[5] = CalculateResult.Rotation * (-1);
-                        }
-                       
-                        Controller.Instance.StationInfo.Epson1下相机请求位置号 = 0;
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            else
-            {
-                if (VisionSystem.Instance.List_飞拍图片.Count!=6)
-                {
-                    Message = $"[{DateTime.Now:HH:mm:ss}]:飞拍拍照次数NG!!";
-                    VisionSystem.Instance.List_飞拍图片.Clear();
-                    Controller.Instance.StationInfo.FlyVisionResult = 2;
-                    _imageInfo.RunState = true;
-                }
-                else
-                {
-                    for (int i = 0; i < VisionSystem.Instance.List_飞拍图片.Count; i++)
-                    {
-                        _cogToolBlock.Inputs["InputImage"].Value = VisionSystem.Instance.List_飞拍图片[i];
-                        // 执行检测算法
-                        _imageInfo._CogImage = VisionSystem.Instance.List_飞拍图片[i];; // 保存原始图像
-                       
-                        _cogToolBlock.Run();
-
-                        _imageInfo.RunState = _cogToolBlock.RunStatus.Result == CogToolResultConstants.Accept;
-                        _imageInfo.RunState = true;
-
-
-                        switch (detectionName)
-                        {
-                            case "飞拍定位":
-
-                                Controller.Instance.StationInfo.FlyVisionX[i] = Convert.ToDouble(_cogToolBlock.Outputs["X"].Value);
-                                Controller.Instance.StationInfo.FlyVisionY[i] = Convert.ToDouble(_cogToolBlock.Outputs["Y"].Value);
-                                //Controller.Instance.StationInfo.FlyVisionR[i] = Convert.ToDouble(_cogToolBlock.Outputs["R"].Value);
-
-                                break;
-                            case "飞拍复检":
-                                Controller.Instance.StationInfo.FlyVisionCheckResult[i] = Convert.ToBoolean(_cogToolBlock.Outputs["Result"].Value);
-                                break;
-                            default:
-                                break;
-                        }
-
-                        string path1 = DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".jpg";
-                        CogImageSaver.SaveCogImageToFile(_imageInfo._CogImage, path1, "OK", detectionName);
-
-
-
-                    }
-                    Controller.Instance.StationInfo.FlyVisionResult = 1;
-                    VisionSystem.Instance.List_飞拍图片.Clear();
-                    return true;
-                }
-
-            }
-
-
-
-
-            // 记录扫码结果
-
-
-           // string path = DateTime.Now.ToString("yyyyMMddHHmmssfff") +".jpg";
-            //int codeCount = (int)_cogToolBlock.Outputs["Count"].Value;
-            //if (codeCount != 1)
-            //{
-            //    SetErrorStatus($"二维码读取错误：检测到{codeCount}个码（预期1个），工具输出Count={codeCount}");
-            //    CogImageSaver.SaveCogImageToFile(Image8Grey, path, "NG", detectionName);
-            //    CogImageSaver.SaveCogRecordToFile(_cogToolBlock.CreateLastRunRecord().SubRecords[0], path, "NG", detectionName);
-            //    return false;
-            //}
-            string path = DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".jpg";
-            CogImageSaver.SaveCogImageToFile(Image8Grey,path,"OK", detectionName);
-            //CogImageSaver.SaveCogRecordToFile(_cogToolBlock.CreateLastRunRecord().SubRecords[0], path, "OK", detectionName);
-
-            return true;
-        }
-
-        /// <summary>
-        /// 更新视觉检测结果显示（根据检测点位名称更新对应UI控件）
-        /// </summary>
-        /// <param name="displayAccessor">显示控件访问器</param>
-        /// <param name="displayUpdater">显示更新器</param>
-        private void UpdateVisionDisplay(CogRecordDisplay displayAccessor, Action<object, object> displayUpdater)
-        {
-            // 创建检测结果记录（用于UI展示）
-            var record = _cogToolBlock.CreateLastRunRecord().SubRecords[0];
-            Message = $"[{DateTime.Now:HH:mm:ss}] 准备更新显示";
-
-            displayAccessor.Record = record;
-            displayAccessor.AutoFit = true;
-            Message = $"[{DateTime.Now:HH:mm:ss}] 显示控件更新完成：Record已设置，AutoFit=True";
-        }
-
-        /// <summary>
-        /// 跨线程更新显示控件（UI控件必须在主线程更新）
-        /// 通过Invoke方法确保UI操作在主线程执行
-        /// </summary>
-        /// <param name="displayAccessor">显示控件访问器</param>
-        /// <param name="displayUpdater">显示更新器</param>
-        /// <param name="record">检测结果记录</param>
-        private void InvokeDisplayUpdate(Func<object> displayAccessor,
-                                        Action<object, object> displayUpdater,
-                                        object record)
-        {
-            var display = displayAccessor.Invoke();
-            Message = $"[{DateTime.Now:HH:mm:ss}] 开始跨线程更新显示：控件类型={display?.GetType().Name}";
-
-            display.GetType().GetMethod("Invoke").Invoke(display, new object[]
-            {
-                new Action(() =>
-                {
-                    displayUpdater.Invoke(display, record);
-                    display.GetType().GetProperty("AutoFit").SetValue(display, true);
-                    Message = $"[{DateTime.Now:HH:mm:ss}] 跨线程显示更新完成：控件已刷新";
-                })
-            });
-        }
-
-        /// <summary>
-        /// 具体更新显示控件的内容（设置检测结果记录）
-        /// </summary>
-        /// <param name="display">显示控件</param>
-        /// <param name="record">检测结果记录</param>
-        private void UpdateDisplay(object display, object record)
-        {
-            display.GetType().GetProperty("Record").SetValue(display, record);
-            Message = $"[{DateTime.Now:HH:mm:ss}] 显示控件内容更新：已设置Record属性";
-        }
 
         /// <summary>
         /// 设置错误状态（统一更新运行状态和消息）
@@ -1515,278 +784,4 @@ namespace JabilVisionMotion.Edit.Process
         }
     }
 
-
-
-
-    //codeInfo = DateTime.Now.ToString("HH_mm_ss_fff");
-
-
-    public static class CogImageSaver
-    {
-        // 定义两种类型的文件夹名称
-        private const string IMAGE_TYPE_FOLDER = "CogImages";
-        private const string RECORD_TYPE_FOLDER = "CogRecords";
-
-        /// <summary>
-        /// 保存Cognex图像到文件系统
-        /// 按检测名称分类保存图像，异步执行避免阻塞主线程
-        /// </summary>
-        //public static void SaveCogImageToFile(ICogImage image, string name, string result, string detectionName)
-        //{
-        //    SaveCogImageToFile(image, name, result, detectionName, null);
-        //}
-
-        /// <summary>
-        /// 保存Cognex图像到文件系统
-        /// 按检测名称和信息码信息分类保存图像，异步执行避免阻塞主线程
-        /// </summary>
-        public static void SaveCogImageToFile(ICogImage image, string name, string result,
-                                      string detectionName, string codeInfo = null)
-        {
-            Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    if (image == null)
-                    {
-                        return;
-                    }
-
-                    if (!ShouldSaveImage(result))
-                        return;
-
-                    // 构建CogImage专用路径，包含类型文件夹
-                    string dir = BuildSaveDirectory(detectionName, result, IMAGE_TYPE_FOLDER);
-                    EnsureDirectoryExists(dir);
-                    //if (codeInfo == null)
-                    //{
-                    //    codeInfo = DateTime.Now.ToShortDateString();
-                    //}
-                    string filePath = Path.Combine(dir, name);
-                    if (string.IsNullOrWhiteSpace(filePath))
-                    {
-                        return;
-                    }
-
-
-                    var tool = new CogImageFileTool();
-                    tool.InputImage = image;
-                    tool.Operator.Open(filePath, CogImageFileModeConstants.Write);//加载存图所选的存储路径
-                    tool.Run();//存图工具运行
-                    tool.Operator.Close();//存图工具关闭        var tool = new CogImageFileTool();
-                    //using (var bitmap = image.ToBitmap())
-                    //{
-                    //    bitmap.Save(filePath);
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    RLog.SaveError(ex, $"保存ICogImage图像失败: {ex.Message}");
-                }
-            });
-        }
-
-        /// <summary>
-        /// 保存Cognex记录中的图像到文件系统
-        /// 从ICogRecord中提取图像，按检测名称分类保存
-        /// </summary>
-        //public static void SaveCogRecordToFile(ICogRecord cogRecord, string name, string result, string detectionName)
-        //{
-        //    SaveCogRecordToFile(cogRecord, name, result, detectionName, null);
-        //}
-
-        /// <summary>
-        /// 保存Cognex记录中的图像到文件系统
-        /// 从ICogRecord中提取图像，按检测名称和信息码信息分类保存
-        /// </summary>
-        public static void SaveCogRecordToFile(ICogRecord cogRecord, string name, string result,
-                                             string detectionName, string codeInfo = null)
-        {
-            // 提前检查必要参数，避免不必要的线程创建
-            if (cogRecord == null || string.IsNullOrWhiteSpace(name) || !ShouldSaveImage(result))
-            {
-                return;
-            }
-            // 构建保存路径
-            string dir = BuildSaveDirectory(detectionName, result, RECORD_TYPE_FOLDER);
-            EnsureDirectoryExists(dir);
-            string filePath = Path.Combine(dir, name);
-
-            if (string.IsNullOrWhiteSpace(filePath))
-            {
-                return;
-            }
-
-            // 获取窗体实例并操作控件
-            //var cogRecordDisplay = MainPage.Instance.cogRecordDisplay_结果图保存;
-            var cogRecordDisplay = MainPage.Instance.cogRecordDisplay5;
-            if (cogRecordDisplay == null)
-            {
-                return;
-            }
-
-            // 使用Invoke确保在UI线程操作控件
-            cogRecordDisplay.Invoke(new Action(() =>
-            {
-                SaveImageToFile(cogRecordDisplay, cogRecord, filePath, codeInfo);
-            }));
-
-        }
-
-        /// <summary>
-        /// 将图像保存到文件，增加错误处理和资源管理
-        /// </summary>
-        private static void SaveImageToFile(CogRecordDisplay display, ICogRecord record, string filePath, string codeInfo)
-        {
-            if (display == null || record == null)
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(filePath))
-            {
-                return;
-            }
-
-            // 检查目标目录是否存在
-            //string directory = Path.GetDirectoryName(filePath);
-            //if (!Directory.Exists(directory))
-            //{
-            //    try
-            //    {
-            //        Directory.CreateDirectory(directory);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        RLog.SaveError(ex, $"创建目录失败: {directory}");
-            //        return;
-            //    }
-            //}
-
-            // 检查磁盘空间
-            if (!HasEnoughDiskSpace(filePath, 10)) // 检查是否有10MB可用空间
-            {
-                return;
-            }
-
-            Bitmap bitmap = null;
-            try
-            {
-                display.Record = record;
-                display.AutoFit = true; // 自动调整图像大小以适应显示控件
-
-                // 尝试创建较小尺寸的位图（如果原始尺寸过大）
-                bitmap = display.CreateContentBitmap(CogDisplayContentBitmapConstants.Custom) as Bitmap;
-                if (bitmap == null)
-                {
-                    // 备选方案：创建缩小版本的图像
-                    // 如果有获取原始尺寸的方法，可以先检查再决定是否缩小
-                    // bitmap = CreateResizedBitmap(display, record);
-                    return;
-                }
-
-                // 保存前检查位图尺寸是否合理
-                if (IsBitmapSizeExcessive(bitmap))
-                {
-                    return;
-                }
-                //if (codeInfo == null)
-                //{
-                //    codeInfo = DateTime.Now.ToShortDateString();
-                //}
-
-
-
-                // 使用using语句确保资源释放
-                using (var tempBitmap = new Bitmap(bitmap))
-                {
-                    tempBitmap.Save(filePath);
-                }
-            }
-            catch (OutOfMemoryException ex)
-            {
-                RLog.SaveError(ex, $"内存不足，无法处理图像: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                RLog.SaveError(ex, $"保存图像到文件时出错: {ex.Message}");
-            }
-            finally
-            {
-                // 确保释放资源
-                if (bitmap != null)
-                {
-                    bitmap.Dispose();
-                    bitmap = null;
-                }
-                // 重置显示的记录，避免资源占用
-                display.Record = null;
-            }
-        }
-
-        // 辅助方法：检查磁盘空间
-        private static bool HasEnoughDiskSpace(string path, long requiredMB)
-        {
-            try
-            {
-                DriveInfo drive = new DriveInfo(Path.GetPathRoot(path));
-                return drive.AvailableFreeSpace >= requiredMB * 1024 * 1024;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        // 辅助方法：检查位图尺寸是否过大
-        private static bool IsBitmapSizeExcessive(Bitmap bitmap)
-        {
-            // 根据实际情况调整阈值
-            const long maxPixels = 50000000; // 5000万像素
-            return (long)bitmap.Width * bitmap.Height > maxPixels;
-        }
-
-        /// <summary>
-        /// 检查是否应该根据系统配置和检测结果保存图像
-        /// </summary>
-        private static bool ShouldSaveImage(string result)
-        {
-            return !((!Project.Instance.visionParm.SaveOkImages && result == "OK") ||
-                    (!Project.Instance.visionParm.SaveNgImages && result == "NG"));
-        }
-
-        /// <summary>
-        /// 构建保存图像的目录路径，增加类型区分文件夹
-        /// </summary>
-        private static string BuildSaveDirectory(string detectionName, string result, string typeFolder)
-        {
-            var pathParts = new List<string>
-        {
-            Jabil.Lib.Parameter.ParameterPath.SaveImagePath,
-            typeFolder,  // 添加类型区分文件夹
-            DateTime.Now.ToString("yyyy-MM-dd"),
-            detectionName ?? "未知检测名称"
-        };
-
-            //if (!string.IsNullOrEmpty(codeInfo))
-            //{
-            //    pathParts.Add(codeInfo);
-            //}
-
-            pathParts.Add(result ?? "未知结果");
-
-            return Path.Combine(pathParts.ToArray());
-        }
-
-        /// <summary>
-        /// 确保目录存在，如果不存在则创建
-        /// </summary>
-        private static void EnsureDirectoryExists(string directoryPath)
-        {
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-        }
-    }
 }

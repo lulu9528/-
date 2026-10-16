@@ -1,6 +1,4 @@
-﻿using Cognex.VisionPro.FGGigE;
-using Cognex.VisionPro.FGGigE.Implementation.Internal;
-using Gma.UserActivityMonitor;
+﻿using Gma.UserActivityMonitor;
 using Jabil.Lib;
 using Jabil.Lib.Parameter;
 using Jabil.Lib.Utils;
@@ -79,6 +77,9 @@ namespace JabilVisionMotion.Frm
 #endif
 
                 _operationLogger = new ControlOperationLogger();
+
+                // 运行时长计时基准：程序启动即开始计时（进入自动运行时会由 Controller.Start 重新赋值重置）
+                RunStartTime = DateTime.Now;
 
             }
             catch (Exception ex)
@@ -829,12 +830,7 @@ namespace JabilVisionMotion.Frm
         {
             Project.Instance.GlobalVariables.IsProgramExiting = true; // 设置程序退出标识
             Controller.Instance.UpdateMachineRunStatus(MachineRunStatus.EmergencyStopped); // 更新设备状态为急停
-            // 断开所有相机连接
-            CogFrameGrabberGigEs cameras = new CogFrameGrabberGigEs();
-            foreach (CogFrameGrabberGigE icf in cameras)
-            {
-                icf.Disconnect(true);
-            }
+            // 相机由 JVS workspace 相机工具算子驱动，无 Cognex 硬件相机连接（VisionPro 已彻底移除）
 
             // 停止图像保存线程
             //VisionLib.Instance.SaveImgThread_Stop();

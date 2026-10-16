@@ -1,10 +1,5 @@
 ﻿using BasicClassLibrary;
 using BasicClassLibrary.RexHelps;
-using Cognex.VisionPro;
-using Cognex.VisionPro.CalibFix;
-using Cognex.VisionPro.FGGigE;
-using Cognex.VisionPro.FGGigE.Implementation.Internal;
-using Cognex.VisionPro.ToolBlock;
 using csLTDMC;
 using Jabil.Lib;
 using Jabil.Module.Log.Frm;
@@ -621,12 +616,7 @@ namespace JabilVisionMotion.Lib
         {
             try
             {
-                // 断开所有相机连接（视觉设备资源释放）
-                CogFrameGrabberGigEs cameras = new CogFrameGrabberGigEs();
-                foreach (CogFrameGrabberGigE camera in cameras)
-                {
-                    camera.Disconnect(true); // true表示强制断开
-                }
+                // 相机由 JVS workspace 相机工具算子驱动，无 Cognex 硬件相机连接（VisionPro 已彻底移除）
 
                 // 停止图像保存线程（避免线程持续运行导致的资源占用）
                 //VisionLib.Instance.SaveImgThread_Stop();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using pyjvl2._C.libjvl;
 using pyjvl2.workspace.framework.record;
@@ -74,6 +75,181 @@ namespace Jabil.Module.Setting.Lib.JVS
             {
                 ThrowIfDisposed();
                 return ToolBlock.records.ToList();
+            }
+        }
+
+        /// <summary>
+        /// 获取最近一次运行的可视化结果图（带标注叠加：JVS 记录图 image_with_shapes）。
+        /// 仅当记录已开启（EnableRecords）且本次运行产生记录时返回图像；否则返回 null。
+        /// 返回的 Bitmap 是独立拷贝（由 numpy tobytes 重建），调用方负责 Dispose。
+        /// 说明：此方法在 _runLock 内取记录并转换，检测线程调用不会与 Run() 并发冲突。
+        /// </summary>
+        public System.Drawing.Bitmap GetLastResultBitmap()
+        {
+            ThrowIfDisposed();
+            lock (_runLock)
+            {
+                try
+                {
+                    var records = ToolBlock.records.ToList();
+                    for (int i = records.Count - 1; i >= 0; i--)
+                    {
+                        try
+                        {
+                            var img = records[i].image_with_shapes;
+                            if (img != null && img.width > 0 && img.height > 0)
+                            {
+                                return ImageToBitmap(img);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // 个别记录可能没有可视化图像，跳过继续找更早的记录
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    // records 访问异常（记录未开启等），返回 null
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 清理 ToolBlock 全部可视化记录（释放中间图像，防内存增长；下次 Run 会重建）。
+        /// </summary>
+        public void ClearRecords()
+        {
+            ThrowIfDisposed();
+            lock (_runLock)
+            {
+                try
+                {
+                    ToolBlock.clean_records();
+                }
+                catch (Exception)
+                {
+                    // 清理失败不影响主流程
+                }
+            }
+        }
+
+        /// <summary>
+        /// 将 JVS Image（image_with_shapes）转换为独立 Bitmap。
+        /// 通过 pythonnet 调用 Python 侧 Image.to_mat()（C# 包装类型未暴露该方法），
+        /// 通道序：OpenCV 惯例 BGR（3 通道）或灰度（1 通道），构建时做 BGR→RGB 交换。
+        /// </summary>
+        private static System.Drawing.Bitmap ImageToBitmap(pyjvl2._C.libjvl.Image img)
+        {
+            int w = img.width, h = img.height, channels = img.channels;
+            if (w <= 0 || h <= 0 || channels <= 0)
+            {
+                return null;
+            }
+
+            try
+            {
+                using (Py.GIL())
+                {
+                    PyObject mat = img.InvokeMethod("to_mat"); // numpy.ndarray（H, W, C）
+                    if (mat == null)
+                    {
+                        return null;
+                    }
+                    try
+                    {
+                        using (PyObject np = Py.Import("numpy"))
+                        using (PyObject contig = np.InvokeMethod("ascontiguousarray", mat))
+                        using (PyObject pyBytes = contig.InvokeMethod("tobytes"))
+                        {
+                            byte[] data = pyBytes.As<byte[]>();
+                            if (data == null || data.Length < w * h)
+                            {
+                                return null;
+                            }
+                            return BuildBitmap(data, w, h, channels);
+                        }
+                    }
+                    finally
+                    {
+                        mat.Dispose();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 由像素字节构建 Bitmap（逐行拷贝以兼容 stride 对齐；3 通道做 BGR→RGB 交换）。
+        /// </summary>
+        private static System.Drawing.Bitmap BuildBitmap(byte[] data, int width, int height, int channels)
+        {
+            bool gray = channels == 1;
+            System.Drawing.Bitmap bmp;
+            if (gray)
+            {
+                bmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+                var palette = bmp.Palette;
+                for (int i = 0; i < 256; i++)
+                {
+                    palette.Entries[i] = System.Drawing.Color.FromArgb(i, i, i);
+                }
+                bmp.Palette = palette;
+            }
+            else
+            {
+                bmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            }
+
+            int bytesPerPixel = gray ? 1 : 3;
+            var rect = new System.Drawing.Rectangle(0, 0, width, height);
+            System.Drawing.Imaging.BitmapData bd = null;
+            try
+            {
+                bd = bmp.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, bmp.PixelFormat);
+                int stride = bd.Stride;
+                if (gray)
+                {
+                    for (int y = 0; y < height; y++)
+                    {
+                        Marshal.Copy(data, y * width, bd.Scan0 + y * stride, width);
+                    }
+                }
+                else
+                {
+                    // BGR → RGB 交换
+                    byte[] row = new byte[width * 3];
+                    for (int y = 0; y < height; y++)
+                    {
+                        int srcOff = y * width * 3;
+                        Buffer.BlockCopy(data, srcOff, row, 0, row.Length);
+                        for (int x = 0; x < width; x++)
+                        {
+                            int p = x * 3;
+                            byte t = row[p];
+                            row[p] = row[p + 2];
+                            row[p + 2] = t;
+                        }
+                        Marshal.Copy(row, 0, bd.Scan0 + y * stride, row.Length);
+                    }
+                }
+                return bmp;
+            }
+            catch (Exception)
+            {
+                bmp.Dispose();
+                return null;
+            }
+            finally
+            {
+                if (bd != null)
+                {
+                    bmp.UnlockBits(bd);
+                }
             }
         }
 

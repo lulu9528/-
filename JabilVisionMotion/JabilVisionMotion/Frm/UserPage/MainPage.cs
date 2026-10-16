@@ -1,5 +1,4 @@
-﻿using Cognex.VisionPro;
-using Jabil.Lib;
+﻿using Jabil.Lib;
 using Jabil.Module.Log.Lib;
 using Sunny.UI;
 using System;
@@ -39,6 +38,156 @@ namespace JabilVisionMotion.Frm.UserPage
         public MainPage()
         {
             InitializeComponent();
+            InitJvsDisplayGrid(); // JVS 检测结果图 6 宫格显示区（替代原 Cognex 显示控件）
+        }
+
+        /// <summary>
+        /// JVS 检测结果图显示格字典（标题 → PictureBox）
+        /// 键：飞拍相机/左上相机/左下相机/右上相机/右下相机/当前检测/结果图保存
+        /// </summary>
+        private readonly Dictionary<string, PictureBox> _jvsDisplayBoxes =
+            new Dictionary<string, PictureBox>(StringComparer.Ordinal);
+
+        /// <summary>
+        /// 构建 JVS 检测结果图显示区（6 宫格 + 结果图保存页大图）
+        /// 布局沿用原 VisionPro 版视觉页骨架（tableLayoutPanel1 3列×4行）：
+        /// 行1 = 飞拍/左上/左下；行3 = 右上/右下/当前检测
+        /// </summary>
+        private void InitJvsDisplayGrid()
+        {
+            try
+            {
+                // panel1（Epson/飞拍测试按钮）移出宫格，固定到视觉页右上角，空出 (2,3) 给"当前检测"格
+                if (tableLayoutPanel1.Controls.Contains(panel1))
+                {
+                    tableLayoutPanel1.Controls.Remove(panel1);
+                    tabPage2.Controls.Add(panel1);
+                    panel1.Location = new Point(tabPage2.ClientSize.Width - panel1.Width - 8, 8);
+                    panel1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+                }
+
+                // 6 宫格
+                AddJvsCell(0, 1, "飞拍相机");
+                AddJvsCell(1, 1, "左上相机");
+                AddJvsCell(2, 1, "左下相机");
+                AddJvsCell(0, 3, "右上相机");
+                AddJvsCell(1, 3, "右下相机");
+                AddJvsCell(2, 3, "当前检测");
+
+                // 结果图保存页（tabPage1）：1 个大显示格，与"当前检测"同步显示最新检测结果图
+                var bigBox = CreateJvsPictureBox();
+                bigBox.Dock = DockStyle.Fill;
+                tabPage1.Controls.Add(bigBox);
+                _jvsDisplayBoxes["结果图保存"] = bigBox;
+            }
+            catch (Exception ex)
+            {
+                RLog.SaveError(ex);
+            }
+        }
+
+        /// <summary>
+        /// 在视觉页宫格 (col,row) 添加一个显示格（标题栏 + 图像区）。
+        /// </summary>
+        private void AddJvsCell(int col, int row, string title)
+        {
+            var cell = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(30, 40, 60) };
+            var label = new Label
+            {
+                Text = title,
+                Dock = DockStyle.Top,
+                Height = 24,
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.White,
+                Font = new Font("宋体", 10F, FontStyle.Bold),
+                BackColor = Color.FromArgb(0, 55, 100)
+            };
+            var box = CreateJvsPictureBox();
+            // Dock 布局顺序：先 Top 标题后 Fill 图像（先添加的先生成 Dock 布局）
+            cell.Controls.Add(label);
+            cell.Controls.Add(box);
+            tableLayoutPanel1.Controls.Add(cell, col, row);
+            _jvsDisplayBoxes[title] = box;
+        }
+
+        private static PictureBox CreateJvsPictureBox()
+        {
+            return new PictureBox
+            {
+                Dock = DockStyle.Fill,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.FromArgb(20, 28, 40)
+            };
+        }
+
+        /// <summary>
+        /// 刷新 JVS 检测结果图（每次检测完成后由 VisionProcess 调用）。
+        /// 相机归属映射：绑定取像工具名称（如"左上相机"）→ 对应宫格；
+        /// 其它检测（复检等）→ "当前检测"格。结果图保存页大图同步刷新。
+        /// 线程安全：VisionProcess 在工作线程调用，自动切换到 UI 线程。
+        /// Bitmap 所有权：本方法接管并负责释放旧图；传入后调用方不要再 Dispose。
+        /// </summary>
+        /// <param name="cameraKey">取像工具名称或检测名称（含 飞拍/左上/右上/左下/右下 关键字）</param>
+        /// <param name="bitmap">JVS 检测结果图（image_with_shapes 转换）</param>
+        public void RefreshJvsDisplay(string cameraKey, Bitmap bitmap)
+        {
+            if (bitmap == null)
+                return;
+            if (IsDisposed || _jvsDisplayBoxes.Count == 0)
+            {
+                bitmap.Dispose();
+                return;
+            }
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action<string, Bitmap>(RefreshJvsDisplay), cameraKey, bitmap);
+                return;
+            }
+
+            PictureBox mainBox = ResolveDisplayBox(cameraKey);
+            if (mainBox == null)
+            {
+                bitmap.Dispose();
+                return;
+            }
+            var old = mainBox.Image;
+            mainBox.Image = bitmap;
+            old?.Dispose();
+
+            // 结果图保存页大图：独立拷贝显示（避免与宫格共享引用引发 Dispose 冲突）
+            if (_jvsDisplayBoxes.TryGetValue("结果图保存", out var big) && big != mainBox)
+            {
+                var oldBig = big.Image;
+                big.Image = (Bitmap)bitmap.Clone();
+                oldBig?.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// 按取像工具/检测名称解析对应显示格。
+        /// </summary>
+        private PictureBox ResolveDisplayBox(string cameraKey)
+        {
+            if (string.IsNullOrWhiteSpace(cameraKey))
+                return null;
+            if (_jvsDisplayBoxes.TryGetValue(cameraKey, out var direct))
+                return direct;
+            if (cameraKey.Contains("飞拍"))
+                return GetBox("飞拍相机");
+            if (cameraKey.Contains("左上"))
+                return GetBox("左上相机");
+            if (cameraKey.Contains("右上"))
+                return GetBox("右上相机");
+            if (cameraKey.Contains("左下"))
+                return GetBox("左下相机");
+            if (cameraKey.Contains("右下"))
+                return GetBox("右下相机");
+            return GetBox("当前检测");
+        }
+
+        private PictureBox GetBox(string key)
+        {
+            return _jvsDisplayBoxes.TryGetValue(key, out var box) ? box : null;
         }
 
         /// <summary>

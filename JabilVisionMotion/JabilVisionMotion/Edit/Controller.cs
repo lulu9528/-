@@ -1,8 +1,4 @@
-﻿using Cognex.VisionPro;
-using Cognex.VisionPro.FGGigE;
-using Cognex.VisionPro.FGGigE.Implementation.Internal;
-using Cognex.VisionPro.ToolBlock;
-using Jabil.Lib;
+﻿using Jabil.Lib;
 using Jabil.Lib.Common;
 using Jabil.Lib.Parameter;
 using Jabil.Module.Alarm.Common.Dtos;
@@ -35,7 +31,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Concurrent;
-using Cognex.VisionPro.ImageFile;
 using JabilVisionMotion.Edit.Process.IOControlProcess;
 using System.Windows.Documents;
 using Newtonsoft.Json;
@@ -860,12 +855,7 @@ namespace JabilVisionMotion.Edit
                 // 更新状态为急停
                 UpdateMachineRunStatus(MachineRunStatus.EmergencyStopped);
 
-                // 断开所有相机连接
-                CogFrameGrabberGigEs cameras = new CogFrameGrabberGigEs();
-                foreach (CogFrameGrabberGigE icf in cameras)
-                {
-                    icf.Disconnect(true);
-                }
+                // 相机由 JVS workspace 相机工具算子驱动，无 Cognex 硬件相机连接（VisionPro 已彻底移除）
 
                 // 关闭运动轴卡，释放运动控制资源
                 var motionCards = MotionSystem.Instance.MotionCards;
@@ -2905,10 +2895,6 @@ namespace JabilVisionMotion.Edit
         /// 屏蔽安全门标识（忽略安全门状态，仅用于特殊场景）
         /// </summary>
         public bool _屏蔽安全门 = false;
-        /// <summary>
-        /// 飞拍图像
-        /// </summary>
-        public CogImage8Grey image8Greys = new CogImage8Grey();
 
 
         /// <summary>
@@ -2973,65 +2959,6 @@ namespace JabilVisionMotion.Edit
             outputData.Rotation = R * 180 / Math.PI;
 
             return outputData;
-        }
-
-        public void SaveImage(CogImage8Grey image8Grey, string Path, string DataTime)
-        {
-            Task.Factory.StartNew(new Action(() =>
-            {
-                if (!Directory.Exists(Project.Instance.ImagePath))
-                {
-                    Directory.CreateDirectory(Project.Instance.ImagePath);
-                }
-
-                string path2 = Project.Instance.ImagePath + "\\" + DateTime.Now.ToString("yyyyMMdd");
-
-                if (!Directory.Exists(path2))
-                {
-                    Directory.CreateDirectory(path2);
-                }
-
-                string path3 = path2 + "\\" + Path;
-
-                if (!Directory.Exists(path3))
-                {
-                    Directory.CreateDirectory(path3);
-                }
-
-
-
-                string FileName = path3 + "\\" + DataTime.Split(':')[0] + DataTime.Split(':')[1] + DataTime.Split(':')[2] + ".bmp";
-
-                CogImageFileTool imageFile = new CogImageFileTool();
-                imageFile.InputImage = image8Grey;
-                imageFile.Operator.Open(FileName, CogImageFileModeConstants.Write);
-                imageFile.Run();
-                imageFile.Dispose();
-            }));
-        }
-
-        public void Macqfifo_complete_飞达下相机(object sender, Cognex.VisionPro.CogCompleteEventArgs e)
-        {
-            ICogAcqFifo fifo = (ICogAcqFifo)sender;
-            ICogImage image = null;
-            int numReadyVal, numPendingVal;
-            bool busyVal;
-            CogAcqInfo info = new CogAcqInfo();
-            try
-            {
-                fifo.GetFifoState(out numPendingVal, out numReadyVal, out busyVal);
-                if (numReadyVal > 0)
-                {
-                    image = fifo.CompleteAcquireEx(info);
-                    Controller.Instance.StationInfo.image8Greys = image as CogImage8Grey;
-                   // MainPage.Instance.qrCamera.Image = image;
-
-                }
-            }
-            catch (Exception ex)
-            {
-                RLog.SaveLog(LogType.Operation, LogLevel.Info, Color.Red, "飞达前下相机-->" + ex);
-            }
         }
 
         public void SaveCSV(string str)

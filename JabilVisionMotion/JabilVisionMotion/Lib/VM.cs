@@ -1,5 +1,4 @@
-﻿using Cognex.VisionPro;
-using Jabil.Lib;
+﻿using Jabil.Lib;
 using Jabil.Module.Log.Lib;
 using JabilVisionMotion.Frm;
 using JabilVisionMotion.Frm.Dialog;

@@ -36,11 +36,6 @@
             this.uiTabControl1 = new Sunny.UI.UITabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.cogRecordDisplay5 = new Cognex.VisionPro.CogRecordDisplay();
-            this.cogRecordDisplay4 = new Cognex.VisionPro.CogRecordDisplay();
-            this.cogRecordDisplay3 = new Cognex.VisionPro.CogRecordDisplay();
-            this.cogRecordDisplay2 = new Cognex.VisionPro.CogRecordDisplay();
-            this.cogRecordDisplay1 = new Cognex.VisionPro.CogRecordDisplay();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -75,7 +70,6 @@
             this.colVisionProcess = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVisionData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.cogRecordDisplay_结果图保存 = new Cognex.VisionPro.CogRecordDisplay();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.uiPanel_底色.SuspendLayout();
@@ -84,16 +78,10 @@
             this.uiTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay1)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay_结果图保存)).BeginInit();
             this.tabPage_Jvs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewVision)).BeginInit();
             this.SuspendLayout();
@@ -186,11 +174,6 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.cogRecordDisplay5, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.cogRecordDisplay4, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.cogRecordDisplay3, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.cogRecordDisplay2, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.cogRecordDisplay1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label3, 2, 0);
@@ -208,95 +191,15 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1031, 404);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // cogRecordDisplay5
             // 
-            this.cogRecordDisplay5.ColorMapLowerClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay5.ColorMapLowerRoiLimit = 0D;
-            this.cogRecordDisplay5.ColorMapPredefined = Cognex.VisionPro.Display.CogDisplayColorMapPredefinedConstants.None;
-            this.cogRecordDisplay5.ColorMapUpperClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay5.ColorMapUpperRoiLimit = 1D;
-            this.cogRecordDisplay5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cogRecordDisplay5.DoubleTapZoomCycleLength = 2;
-            this.cogRecordDisplay5.DoubleTapZoomSensitivity = 2.5D;
-            this.cogRecordDisplay5.Location = new System.Drawing.Point(346, 244);
-            this.cogRecordDisplay5.MouseWheelMode = Cognex.VisionPro.Display.CogDisplayMouseWheelModeConstants.Zoom1;
-            this.cogRecordDisplay5.MouseWheelSensitivity = 1D;
-            this.cogRecordDisplay5.Name = "cogRecordDisplay5";
-            this.cogRecordDisplay5.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("cogRecordDisplay5.OcxState")));
-            this.cogRecordDisplay5.Size = new System.Drawing.Size(337, 157);
-            this.cogRecordDisplay5.TabIndex = 17;
             // 
-            // cogRecordDisplay4
             // 
-            this.cogRecordDisplay4.ColorMapLowerClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay4.ColorMapLowerRoiLimit = 0D;
-            this.cogRecordDisplay4.ColorMapPredefined = Cognex.VisionPro.Display.CogDisplayColorMapPredefinedConstants.None;
-            this.cogRecordDisplay4.ColorMapUpperClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay4.ColorMapUpperRoiLimit = 1D;
-            this.cogRecordDisplay4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cogRecordDisplay4.DoubleTapZoomCycleLength = 2;
-            this.cogRecordDisplay4.DoubleTapZoomSensitivity = 2.5D;
-            this.cogRecordDisplay4.Location = new System.Drawing.Point(3, 244);
-            this.cogRecordDisplay4.MouseWheelMode = Cognex.VisionPro.Display.CogDisplayMouseWheelModeConstants.Zoom1;
-            this.cogRecordDisplay4.MouseWheelSensitivity = 1D;
-            this.cogRecordDisplay4.Name = "cogRecordDisplay4";
-            this.cogRecordDisplay4.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("cogRecordDisplay4.OcxState")));
-            this.cogRecordDisplay4.Size = new System.Drawing.Size(337, 157);
-            this.cogRecordDisplay4.TabIndex = 16;
             // 
-            // cogRecordDisplay3
             // 
-            this.cogRecordDisplay3.ColorMapLowerClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay3.ColorMapLowerRoiLimit = 0D;
-            this.cogRecordDisplay3.ColorMapPredefined = Cognex.VisionPro.Display.CogDisplayColorMapPredefinedConstants.None;
-            this.cogRecordDisplay3.ColorMapUpperClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay3.ColorMapUpperRoiLimit = 1D;
-            this.cogRecordDisplay3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cogRecordDisplay3.DoubleTapZoomCycleLength = 2;
-            this.cogRecordDisplay3.DoubleTapZoomSensitivity = 2.5D;
-            this.cogRecordDisplay3.Location = new System.Drawing.Point(689, 43);
-            this.cogRecordDisplay3.MouseWheelMode = Cognex.VisionPro.Display.CogDisplayMouseWheelModeConstants.Zoom1;
-            this.cogRecordDisplay3.MouseWheelSensitivity = 1D;
-            this.cogRecordDisplay3.Name = "cogRecordDisplay3";
-            this.cogRecordDisplay3.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("cogRecordDisplay3.OcxState")));
-            this.cogRecordDisplay3.Size = new System.Drawing.Size(339, 155);
-            this.cogRecordDisplay3.TabIndex = 15;
             // 
-            // cogRecordDisplay2
             // 
-            this.cogRecordDisplay2.ColorMapLowerClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay2.ColorMapLowerRoiLimit = 0D;
-            this.cogRecordDisplay2.ColorMapPredefined = Cognex.VisionPro.Display.CogDisplayColorMapPredefinedConstants.None;
-            this.cogRecordDisplay2.ColorMapUpperClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay2.ColorMapUpperRoiLimit = 1D;
-            this.cogRecordDisplay2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cogRecordDisplay2.DoubleTapZoomCycleLength = 2;
-            this.cogRecordDisplay2.DoubleTapZoomSensitivity = 2.5D;
-            this.cogRecordDisplay2.Location = new System.Drawing.Point(346, 43);
-            this.cogRecordDisplay2.MouseWheelMode = Cognex.VisionPro.Display.CogDisplayMouseWheelModeConstants.Zoom1;
-            this.cogRecordDisplay2.MouseWheelSensitivity = 1D;
-            this.cogRecordDisplay2.Name = "cogRecordDisplay2";
-            this.cogRecordDisplay2.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("cogRecordDisplay2.OcxState")));
-            this.cogRecordDisplay2.Size = new System.Drawing.Size(337, 155);
-            this.cogRecordDisplay2.TabIndex = 14;
             // 
-            // cogRecordDisplay1
             // 
-            this.cogRecordDisplay1.ColorMapLowerClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay1.ColorMapLowerRoiLimit = 0D;
-            this.cogRecordDisplay1.ColorMapPredefined = Cognex.VisionPro.Display.CogDisplayColorMapPredefinedConstants.None;
-            this.cogRecordDisplay1.ColorMapUpperClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay1.ColorMapUpperRoiLimit = 1D;
-            this.cogRecordDisplay1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cogRecordDisplay1.DoubleTapZoomCycleLength = 2;
-            this.cogRecordDisplay1.DoubleTapZoomSensitivity = 2.5D;
-            this.cogRecordDisplay1.Location = new System.Drawing.Point(3, 43);
-            this.cogRecordDisplay1.MouseWheelMode = Cognex.VisionPro.Display.CogDisplayMouseWheelModeConstants.Zoom1;
-            this.cogRecordDisplay1.MouseWheelSensitivity = 1D;
-            this.cogRecordDisplay1.Name = "cogRecordDisplay1";
-            this.cogRecordDisplay1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("cogRecordDisplay1.OcxState")));
-            this.cogRecordDisplay1.Size = new System.Drawing.Size(337, 155);
-            this.cogRecordDisplay1.TabIndex = 13;
             // 
             // label1
             // 
@@ -585,7 +488,6 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.cogRecordDisplay_结果图保存);
             this.tabPage1.Location = new System.Drawing.Point(0, 0);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Size = new System.Drawing.Size(200, 60);
@@ -593,23 +495,7 @@
             this.tabPage1.Text = "结果图保存";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // cogRecordDisplay_结果图保存
             // 
-            this.cogRecordDisplay_结果图保存.ColorMapLowerClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay_结果图保存.ColorMapLowerRoiLimit = 0D;
-            this.cogRecordDisplay_结果图保存.ColorMapPredefined = Cognex.VisionPro.Display.CogDisplayColorMapPredefinedConstants.None;
-            this.cogRecordDisplay_结果图保存.ColorMapUpperClipColor = System.Drawing.Color.Black;
-            this.cogRecordDisplay_结果图保存.ColorMapUpperRoiLimit = 1D;
-            this.cogRecordDisplay_结果图保存.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cogRecordDisplay_结果图保存.DoubleTapZoomCycleLength = 2;
-            this.cogRecordDisplay_结果图保存.DoubleTapZoomSensitivity = 2.5D;
-            this.cogRecordDisplay_结果图保存.Location = new System.Drawing.Point(0, 0);
-            this.cogRecordDisplay_结果图保存.MouseWheelMode = Cognex.VisionPro.Display.CogDisplayMouseWheelModeConstants.Zoom1;
-            this.cogRecordDisplay_结果图保存.MouseWheelSensitivity = 1D;
-            this.cogRecordDisplay_结果图保存.Name = "cogRecordDisplay_结果图保存";
-            this.cogRecordDisplay_结果图保存.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("cogRecordDisplay_结果图保存.OcxState")));
-            this.cogRecordDisplay_结果图保存.Size = new System.Drawing.Size(200, 60);
-            this.cogRecordDisplay_结果图保存.TabIndex = 12;
             // 
             // button3
             // 
@@ -645,17 +531,11 @@
             this.tabPage2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.cogRecordDisplay_结果图保存)).EndInit();
             this.tabPage_Jvs.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewVision)).EndInit();
             this.ResumeLayout(false);
@@ -694,13 +574,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn 焊接能量;
         private System.Windows.Forms.DataGridViewTextBoxColumn 焊接峰值功率;
         private System.Windows.Forms.TabPage tabPage1;
-        public Cognex.VisionPro.CogRecordDisplay cogRecordDisplay_结果图保存;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        public Cognex.VisionPro.CogRecordDisplay cogRecordDisplay5;
-        public Cognex.VisionPro.CogRecordDisplay cogRecordDisplay4;
-        public Cognex.VisionPro.CogRecordDisplay cogRecordDisplay3;
-        public Cognex.VisionPro.CogRecordDisplay cogRecordDisplay2;
-        public Cognex.VisionPro.CogRecordDisplay cogRecordDisplay1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

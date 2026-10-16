@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Cognex.VisionPro;
 using Jabil.Module.FlyVision.Lib;
 using Jabil.Module.Log.Lib;
 
@@ -38,15 +37,13 @@ namespace Jabil.Module.FlyVision
         //public IndexImage[] List_前工位_下相机 = new IndexImage[8];// 前工位_下相机缓存
         //public IndexImage[] List_后工位_下相机 = new IndexImage[8];// 后工位_下相机缓存
 
-        public List<ICogImage> List_前工位_下相机 = new List<ICogImage>();
-        public List<ICogImage> List_后工位_下相机 = new List<ICogImage>();
+        public List<object> List_前工位_下相机 = new List<object>();
+        public List<object> List_后工位_下相机 = new List<object>();
 
-
-        public MacqfifoComplete macqfifoComplete = new MacqfifoComplete();
         public class IndexImage
         {
             public int Index = 0;
-            public ICogImage Image;
+            public object Image;
             public bool Result;
         }
 

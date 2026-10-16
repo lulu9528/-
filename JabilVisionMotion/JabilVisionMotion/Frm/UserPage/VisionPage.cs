@@ -2,7 +2,7 @@
 using Jabil.Module.IO.Frm;
 using Jabil.Module.Log.Frm;
 using Jabil.Module.Log.Lib;
-using Jabil.Module.Vision.Frm;
+using Jabil.Module.Setting.Lib.JVS;
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
@@ -322,8 +322,8 @@ namespace JabilVisionMotion.Frm.UserPage
             switch (mode)
             {
                 case FormPage.VPPPage:
-                    // 添加VPP编辑页面（单窗体）
-                    var vppForm = Frm_VPTool.Instance;
+                    // JVS 模式：视觉方案/取图工具配置（替代原 Cognex VPP 编辑，VisionPro 已彻底移除）
+                    var vppForm = new Frm_JvsSetting();
                     vppForm.TopLevel = false;       // 设置为非顶级窗口，允许嵌入到其他容器
                     vppForm.Dock = DockStyle.Fill;  // 填充整个容器，确保占满可用空间
                     vppForm.AutoScaleMode = AutoScaleMode.None; // 禁用自动缩放，避免布局错乱
@@ -332,28 +332,18 @@ namespace JabilVisionMotion.Frm.UserPage
                     return true;
 
                 case FormPage.ManualPage:
-                    // 添加视觉手动操作相关的两个窗体（多窗体组合）
-                    // 左侧控制面板
-                    var visionControl = Frm_VisionControl.Instance;
-                    visionControl.TopLevel = false;
-                    visionControl.Dock = DockStyle.Left;  // 停靠在左侧
-                    visionControl.AutoScaleMode = AutoScaleMode.None;
-                    uiPanel_window.Controls.Add(visionControl);
-                    visionControl.Show();
-
-                    // 底部操作视图
+                    // JVS 模式：手动操作视图（原 Cognex 视觉手动控制窗体已移除，保留操作视图）
                     var operateView = Frm_OperateView.Instance;
                     operateView.TopLevel = false;
-                    operateView.Dock = DockStyle.Bottom; // 停靠在底部
+                    operateView.Dock = DockStyle.Fill; // 填充整个容器
                     operateView.AutoScaleMode = AutoScaleMode.None;
                     uiPanel_window.Controls.Add(operateView);
                     operateView.Show();
                     return true;
 
                 case FormPage.VPPSettingPage:
-                    //添加VPP配置页面（当前注释掉，需根据实际情况实现）
-                    // 需确保Frm_VPPSetting类存在并正确实现
-                    var settingForm = Frm_VPPSetting.Instance;
+                    // JVS 模式：JVS 设置（与 VPP 页共用同一 JVS 设置窗体，单例复用）
+                    var settingForm = new Frm_JvsSetting();
                     settingForm.TopLevel = false;
                     settingForm.Dock = DockStyle.Fill;
                     settingForm.AutoScaleMode = AutoScaleMode.None;

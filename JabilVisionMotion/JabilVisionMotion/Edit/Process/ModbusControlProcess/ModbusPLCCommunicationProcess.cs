@@ -1,5 +1,4 @@
-﻿using Cognex.VisionPro;
-using HslCommunication;
+﻿using HslCommunication;
 using Jabil.Lib;
 using Jabil.Lib.Common;
 using Jabil.Module.Log.Lib;

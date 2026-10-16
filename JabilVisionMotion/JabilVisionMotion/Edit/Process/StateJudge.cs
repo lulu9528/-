@@ -1,5 +1,4 @@
-﻿using Cognex.VisionPro;
-using Jabil.Lib;
+﻿using Jabil.Lib;
 using Jabil.Module.Log.Lib;
 using Jabil.Module.ProductData.Frm;
 using Jabil.Module.ProductData.Lib;
@@ -195,32 +194,12 @@ namespace JabilVisionMotion.Edit.Process
                         {
                             case "飞拍开始":
 
-                                foreach (var item in VisionSystem.Instance.ListVisionTool)
-                                {
-                                    if (item.检测工具名称=="飞拍相机" && item.检测工具类型 == "CogAcqFifoTool")
-                                    {
-
-                                        VisionSystem.AcqFifoTools[item.检测工具索引].Operator.Complete += Macqfifo_complete_飞拍相机;
-                                        // 设置采集图像的模式
-                                        VisionSystem.AcqFifoTools[item.检测工具索引].Operator.OwnedTriggerParams.TriggerModel = CogAcqTriggerModelConstants.Auto;
-                                        VisionSystem.AcqFifoTools[item.检测工具索引].Operator.OwnedTriggerParams.TriggerEnabled = true;
-                                    }
-                                }
+                                // JVS 模式：飞拍相机由 JVS 取图工具算子驱动（.jvt 相机工具），无需订阅 Cognex 硬件取像事件
                                 Controller.Instance.StationInfo.FlyVisionResult = 0;
                                 break;
 
                             case "飞拍结束":
-                                foreach (var item in VisionSystem.Instance.ListVisionTool)
-                                {
-                                    if (item.检测工具名称 == "飞拍相机" && item.检测工具类型 == "CogAcqFifoTool")
-                                    {
-
-                                        VisionSystem.AcqFifoTools[item.检测工具索引].Operator.Complete -= Macqfifo_complete_飞拍相机;
-                                        // 设置采集图像的模式
-                                        VisionSystem.AcqFifoTools[item.检测工具索引].Operator.OwnedTriggerParams.TriggerModel = CogAcqTriggerModelConstants.Manual;
-                                        VisionSystem.AcqFifoTools[item.检测工具索引].Operator.OwnedTriggerParams.TriggerEnabled = true;
-                                    }
-                                }
+                                // JVS 模式：飞拍相机由 JVS 取图工具算子驱动，无 Cognex 硬件事件可取消
                                 break;
 
                             case "Epson2是否需要上相机拍照":
@@ -468,49 +447,6 @@ namespace JabilVisionMotion.Edit.Process
                 return;
             }
         }
-
-        private int 飞拍相机 = 0;
-        public void Macqfifo_complete_飞拍相机(object sender, Cognex.VisionPro.CogCompleteEventArgs e)
-        {
-            ICogAcqFifo fifo = (ICogAcqFifo)sender;
-            ICogImage image = null;
-            int numReadyVal, numPendingVal;
-            bool busyVal;
-            CogAcqInfo info = new CogAcqInfo();
-            try
-            {
-                fifo.GetFifoState(out numPendingVal, out numReadyVal, out busyVal);
-                if (numReadyVal > 0)
-                {
-                    image = fifo.CompleteAcquireEx(info);
-                    if (飞拍相机 > 6)
-                    {
-                        GC.Collect();
-                        飞拍相机 = 0;
-                    }
-                    飞拍相机 += 1;
-                    ThreadPool.QueueUserWorkItem(ImageRun_飞拍相机, image);
-                }
-            }
-            catch (Exception ex)
-            {
-                
-            }
-        }
-
-        private void ImageRun_飞拍相机(object obj)
-        {
-            try
-            {
-                VisionSystem.Instance.List_飞拍图片.Add((ICogImage)obj);
-
-            }
-            catch
-            {
-
-            }
-        }
-
 
 
         public bool 前滑台第一焊接位(HttpClient httpClient, string uri, string code)
